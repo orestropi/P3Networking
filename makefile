@@ -1,5 +1,5 @@
 
-all:wireview.o
+all:class.o
 	gcc class.c -o class
 
 clean:
