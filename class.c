@@ -7,6 +7,6 @@
 #include "cs3516sock.h"
 
 int main(int argc, char *argv[]) {
-printf("hi");
+printf("hi, %s", create_cs3516_socket());
 return 0;
 }
