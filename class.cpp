@@ -4,7 +4,7 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
-#include "cs3516sock.h"
+#include "cs3516sock.hpp"
 
 int main(int argc, char *argv[]) {
 printf("hi, %d", create_cs3516_socket());

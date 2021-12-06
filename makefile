@@ -1,6 +1,6 @@
 
 all:class.o
-	gcc class.c -o class
+	g++ class.cpp -o class
 
 clean:
 	$(RM) class class.o
