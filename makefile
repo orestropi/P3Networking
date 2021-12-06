@@ -1,6 +1,6 @@
 
-all:class.o
-	g++ class.cpp -o class
+all:server.o
+	g++ server.cpp -o server
 
 clean:
-	$(RM) class class.o
+	$(RM) server server.o
