@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-//Part of code from Craig Shue
 // Set the following port to a unique number:
 #define MYPORT 5950
 

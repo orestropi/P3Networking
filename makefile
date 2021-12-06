@@ -1,6 +1,6 @@
 
 all:wireview.o
-	g++ class.cpp -o class
+	gcc class.c -o class
 
 clean:
 	$(RM) class class.o
