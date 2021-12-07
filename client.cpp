@@ -20,7 +20,7 @@ printf("hi, %d", sock);
 	socklen_t len = 0;
 	
     
-int len = cs3516_send(sock, (const char *)helloWorld, strlen(helloWorld),
+int len = cs3516_send(sock, (char *)helloWorld, strlen(helloWorld),
 		sock);
 	if(len ==-1)
 	{
