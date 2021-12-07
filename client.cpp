@@ -21,8 +21,8 @@ printf("hi, %d", sock);
 	socklen_t len = 0;
 	
     
-int len = sendto(sock, (const char *)helloWorld, strlen(helloWorld),
-		0, (const struct sockaddr *)&sock, sizeof(sock));
+int len = cs3516_send(sock, (const char *)helloWorld, strlen(helloWorld),
+		sock);
 	if(len ==-1)
 	{
 		perror("failed to send");

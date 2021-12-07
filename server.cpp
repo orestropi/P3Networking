@@ -19,8 +19,7 @@ printf("hi, %d", sockN);
 	socklen_t len = 0;
 	
     
-	int n = recvfrom(sockN, (char *)buffer, 50, MSG_WAITALL,
-		(sockaddr *)&sockN, &len);
+	int n = cs3516_recv(sockN, (char *)buffer, 50);
 	buffer[n] = '\n';
 	printf("%s", buffer);
 	close(sockN);
