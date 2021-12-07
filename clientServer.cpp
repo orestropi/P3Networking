@@ -48,12 +48,14 @@ cs3516_send(sock, buffer, 40, next_hop);
     struct upd_hdr *sally = (struct upd_hdr *)(dest_buffer+20);
     char* data = (dest_buffer + 28);
 
-    bob->ttl--:
-    if (bob->ttl < 1){continue:}
+    //dont change addresses in Bob
 
+    bob->ttl--:
+    if (bob->ttl < 1){continue;}
+    //where 5 is a real address
     if(bob->ip_dst == 5){
         // then send to host X
-        cs3516_send(sock, buffer, 40, next_hop);
+        cs3516_send(sock, dest_buffer, 40, 5);
     }
         else{}
 }
