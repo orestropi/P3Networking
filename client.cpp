@@ -12,6 +12,7 @@
 
 int main(int argc, char *argv[]) {
     //if statement to cal client or server function
+    int sock = 3;
     char * helloWorld = "Hello world!";
 
 printf("hi, %d", sock);	
