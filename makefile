@@ -1,7 +1,6 @@
 
-all:server.o client.o
-	g++ server.cpp -o server
-	g++ client.cpp -o client
+all:clientServer.o clientServer.o
+	g++ clientServer.cpp -o clientServer
 
 clean:
-	$(RM) server server.o
+	$(RM) clientServer clientServer.o

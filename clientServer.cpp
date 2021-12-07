@@ -12,21 +12,17 @@
 
 int main(int argc, char *argv[]) {
     //if statement to cal client or server function
-    int sock = create_cs3516_socket();
-    char * helloWorld = "Hello world!";
-
-printf("hi, %d", sock);
+    int sockN = create_cs3516_socket();
+    char buffer[50] = {0};
+printf("hi, %d", sockN);
 
 	socklen_t len = 0;
 	
     
-int len = cs3516_send(sock, (const char *)helloWorld, strlen(helloWorld),
-		sock);
-	if(len ==-1)
-	{
-		perror("failed to send");
-	}
-	close(sock);
+	int n = cs3516_recv(sockN, (char *)buffer, 50);
+	buffer[n] = '\n';
+	printf("%s", buffer);
+	close(sockN);
 
 return 0;
 }
