@@ -15,10 +15,7 @@ int main(int argc, char *argv[]) {
     int sock = create_cs3516_socket();
     char * helloWorld = "Hello world!";
 
-printf("hi, %d", sock);
-
-	socklen_t len = 0;
-	
+printf("hi, %d", sock);	
     
 int len = cs3516_send(sock, (char *)helloWorld, strlen(helloWorld),
 		sock);
