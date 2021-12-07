@@ -12,7 +12,6 @@
 
 int main(int argc, char *argv[]) {
     //if statement to cal client or server function
-    int sock = create_cs3516_socket();
     char * helloWorld = "Hello world!";
 
 printf("hi, %d", sock);	
