@@ -11,7 +11,7 @@
 #include "cs3516sock.hpp"
 
 int main(int argc, char *argv[]) {
-    //if statement to cal client or server function
+    //if statement to call client or server function
     int sock = 3;
     char * helloWorld = "Hello world!";
 
