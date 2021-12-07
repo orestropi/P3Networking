@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 printf("hi, %d", sock);	
     
 int len = cs3516_send(sock, (char *)helloWorld, strlen(helloWorld),
-		5950);
+		(in_addr_t) 0x00000000);
 	if(len ==-1)
 	{
 		perror("failed to send");
