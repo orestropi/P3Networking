@@ -20,7 +20,7 @@ printf("hi, %d", sock);
 	
     
 	int n = recvfrom(sock, (char *)buffer, 50, MSG_WAITALL,
-		0, &len);
+		(sockaddr *)&sock, &len);
 	buffer[n] = '\n';
 	printf("%s", buffer);
 	close(sock);
