@@ -18,10 +18,10 @@ printf("hi, %d", sockN);
 
 	socklen_t len = 0;
 	
-    
-	int n = cs3516_recv(sockN, (char *)buffer, 50);
+    while(true){int n = cs3516_recv(sockN, (char *)buffer, 50);
 	buffer[n] = '\n';
-	printf("%s", buffer);
+	printf("%s", buffer);}
+	
 	close(sockN);
 
 return 0;
