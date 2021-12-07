@@ -12,18 +12,18 @@
 
 int main(int argc, char *argv[]) {
     //if statement to cal client or server function
-    int sock = create_cs3516_socket();
+    int sockN = create_cs3516_socket();
     char buffer[50] = {0};
-printf("hi, %d", sock);
+printf("hi, %d", sockN);
 
 	socklen_t len = 0;
 	
     
-	int n = recvfrom(sock, (char *)buffer, 50, MSG_WAITALL,
-		(sockaddr *)&sock, &len);
+	int n = recvfrom(sockN, (char *)buffer, 50, MSG_WAITALL,
+		(sockaddr *)&sockN, &len);
 	buffer[n] = '\n';
 	printf("%s", buffer);
-	close(sock);
+	close(sockN);
 
 return 0;
 }
