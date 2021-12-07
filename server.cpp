@@ -3,6 +3,10 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <stdlib.h> 
+#include <unistd.h> 
+#include <string.h> 
+#include <arpa/inet.h> 
 #include <string.h>
 #include "cs3516sock.hpp"
 
