@@ -16,4 +16,4 @@ As shown below a hello world message will be displayed showing how the program w
 
 use make clean to delete all executables
 
-All tasks 1-4 should be completed fro checkpoint 1
+All tasks 1-4 should be completed for checkpoint 1
