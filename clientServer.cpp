@@ -173,7 +173,7 @@ int main(int argc, char* argv[]) {
     printf("client here");
         int sockfd;
     char buffer[MAXLINE];
-    char *hello = "Hello from client";
+    char *hello = "Hello World";
     struct sockaddr_in     servaddr;
    
     // Creating socket file descriptor
