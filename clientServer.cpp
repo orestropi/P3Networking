@@ -29,6 +29,7 @@
 
 int main(int argc, char *argv[]) {
     //if statement to cal client or server function
+    if(argv[0] == (char*)1){
     int sock = create_cs3516_socket();
     char buffer[40];
     struct ip *bob = (struct ip *)buffer;
@@ -38,9 +39,13 @@ int main(int argc, char *argv[]) {
     printf("Hi I am this socket, %d", sock);	
     
     //5 is next_hop
-    cs3516_send(sock, buffer, 40, 5);
+    cs3516_send(sock, buffer, 40, (unsigned long)"1.2.3.1");//("10.0.2.104", "1.2.3.1"));
+    }
 
+
+    if(argv[0] == (char*)2){
     //router
+    int sock = create_cs3516_socket();
     while(1){
     char dest_buffer[3000];
 
@@ -49,19 +54,26 @@ int main(int argc, char *argv[]) {
     struct udphdr *sally = (struct udphdr *)(dest_buffer+20);
     char* data = (dest_buffer + 28);
 
+    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
+    bob->ip_dst = myaddress2;
+    sally->uh_sport = ntohs(5950);
+    strncpy(data,"hello world", 12);
+
     //dont change addresses in Bob
     bob->ip_ttl--;
     if (bob->ip_ttl < 1){continue;}
     //where 5 is a real address
-    in_addr myaddress = {.s_addr = inet_addr("10.0.0.1")};
+    in_addr myaddress = {.s_addr = inet_addr("10.0.2.104")};
     if(bob->ip_dst.s_addr == myaddress.s_addr){
         // then send to host X
         cs3516_send(sock, dest_buffer, 40, (unsigned long)inet_ntoa(bob->ip_dst));//[5's real IP]);
     }
         else{
             //send to host y
-        }
+        }	
+        
+        close(sock);
 }
-	close(sock);
+}
 return 0;
 }
