@@ -30,9 +30,9 @@
 int main(int argc, char** argv) {
     //if statement to cal client or server function
     
-    if(argv[0] == "1"){
+    if(argc == 0){
     printf("Hi I am this socket");	
-    int sock = create_cs3516_socket();
+    int sock = create_cs3516_socket(inet_addr("10.0.2.104"));
     char buffer[40];
     struct ip *bob = (struct ip *)buffer;
     struct udphdr *sally = (struct udphdr *)(buffer+20);
@@ -42,13 +42,13 @@ int main(int argc, char** argv) {
     printf("Hi I am this socket, %d", sock);	
     
     //5 is next_hop
-    cs3516_send(sock, buffer, 40, (unsigned long)"1.2.3.1");//("10.0.2.104", "1.2.3.1"));
+    cs3516_send(sock, buffer, 40, (unsigned long)("1.2.3.1"));//("10.0.2.104", "1.2.3.1"));
     }
 
 
-    if(argv[0] == "2"){
+    if(argc >= 1){
     //router
-    int sock = create_cs3516_socket();
+    int sock = create_cs3516_socket(inet_addr("10.0.2.105"));
     while(1){
     char dest_buffer[3000];
 

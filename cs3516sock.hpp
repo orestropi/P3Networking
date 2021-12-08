@@ -8,7 +8,7 @@
 // Set the following port to a unique number:
 #define MYPORT 5950
 
-int create_cs3516_socket() {
+int create_cs3516_socket(in_addr_t ourAdress) {
     int sock;
     struct sockaddr_in server;
     
@@ -18,7 +18,7 @@ int create_cs3516_socket() {
 
     bzero(&server, sizeof(server));
     server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
+    server.sin_addr.s_addr = ourAdress;
     server.sin_port = htons(MYPORT);
     if (bind(sock, (struct sockaddr *) &server, sizeof(server) ) < 0) 
         perror("Unable to bind CS3516 socket");
