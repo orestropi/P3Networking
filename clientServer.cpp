@@ -98,6 +98,7 @@ return 0;
 
 int main(int argc, char** argv) {
     if(!(argc == 0)){
+    printf("client here");
         int sockfd;
     char buffer[MAXLINE];
     char *hello = "Hello from client";
@@ -133,7 +134,12 @@ int main(int argc, char** argv) {
     close(sockfd);
     }
 
+    
+    
+    
     if(argc == 0){
+            printf("server here");
+
     int sockfd;
     char buffer[MAXLINE];
     char *hello = "Hello from server";
