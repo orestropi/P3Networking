@@ -29,12 +29,14 @@
 
 int main(int argc, char *argv[]) {
     //if statement to cal client or server function
+    
     if(argv[0] == (char*)1){
     int sock = create_cs3516_socket();
     char buffer[40];
     struct ip *bob = (struct ip *)buffer;
     struct udphdr *sally = (struct udphdr *)(buffer+20);
     char* data = (buffer + 28);
+    strncpy(data,"hello world", 12);
 
     printf("Hi I am this socket, %d", sock);	
     
@@ -57,6 +59,7 @@ int main(int argc, char *argv[]) {
     in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
     bob->ip_dst = myaddress2;
     sally->uh_sport = ntohs(5950);
+    printf(data);
     strncpy(data,"hello world", 12);
 
     //dont change addresses in Bob
