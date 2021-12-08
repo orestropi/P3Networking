@@ -102,7 +102,7 @@ return 0;
 int main(int argc, char* argv[]) {
     
     if(argc < 2){
-            printf("server here");
+            printf("server here\n");
 
     int sockfd;
     char dest_buffer[MAXLINE];
@@ -170,7 +170,7 @@ int main(int argc, char* argv[]) {
 
 
     else{
-    printf("client here");
+    printf("client here\n");
         int sockfd;
     char buffer[MAXLINE];
     char *hello = "Hello World";
