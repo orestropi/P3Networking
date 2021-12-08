@@ -83,6 +83,7 @@ return 0;
 }*/
 // Server side implementation of UDP client-server model
 #include <iostream>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -90,9 +91,11 @@ return 0;
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>  
+#include <netinet/in.h> 
+#include <netinet/ip.h>
+#include <netinet/udp.h> 
 #define PORT     8080
-#define MAXLINE 1024
+#define MAXLINE 3000
    
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
@@ -102,8 +105,8 @@ int main(int argc, char* argv[]) {
             printf("server here");
 
     int sockfd;
-    char buffer[MAXLINE];
-    char *hello = "Hello from server";
+    char dest_buffer[MAXLINE];
+    char *hello = "Hello world";
     struct sockaddr_in servaddr, cliaddr;
        
     // Creating socket file descriptor
@@ -133,15 +136,35 @@ int main(int argc, char* argv[]) {
     len = sizeof(cliaddr);  //len is value/resuslt
     socklen_t * fromlen2 = (socklen_t*)sizeof(cliaddr);//added
 
-    n = recvfrom(sockfd, (char *)buffer, MAXLINE, 
+    while(1){
+
+    n = recvfrom(sockfd, (char *)dest_buffer, MAXLINE, 
                 MSG_WAITALL, ( struct sockaddr *) &cliaddr,
                 fromlen2);
-    buffer[n] = '\0';
-    printf("Client : %s\n", buffer);
+    dest_buffer[n] = '\0';
+    printf("Client : %s\n", dest_buffer);
+
+    //part 2 of roadmap generating random packet for transmission
+    struct ip *bob = (struct ip *)dest_buffer;
+    struct udphdr *sally = (struct udphdr *)(dest_buffer+20);
+    char* data = (dest_buffer + 28);
+
+    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
+    bob->ip_dst = myaddress2;
+    sally->uh_sport = ntohs(5950);
+    strncpy(data,"hello world", 12);
+
+    
+
+    //part 4 of roadmap incrementing ttl
+    bob->ip_ttl--;
+    if (bob->ip_ttl < 1){continue;}
+
+
     sendto(sockfd, (const char *)hello, strlen(hello), 
         MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
             len);
-    printf("Hello message sent.\n"); }
+    printf("Hello message sent.\n"); }}
 
 
 
