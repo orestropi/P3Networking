@@ -90,17 +90,40 @@ return 0;
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
-   
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h> 
+#include <unistd.h> 
+#include <string.h> 
+#include <arpa/inet.h> 
+#include <string.h>
+#include "cs3516sock.hpp"
+#include <iostream>
+#include <pcap.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netinet/if_ether.h>
+#include <time.h>
+#include <map>
+#include <set>
+#include <linux/if_ether.h>
+#include <netinet/ether.h>
+#include <netinet/ip.h>
+#include <netinet/udp.h>
+#include <arpa/inet.h>   
 #define PORT     8080
 #define MAXLINE 1024
    
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
 int main(int argc, char** argv) {
-    
-
-    
-    
     
     if(argc == 0){
             printf("server here");
@@ -149,7 +172,7 @@ int main(int argc, char** argv) {
 
 
 
-    
+
     if(argc >= 1){
     printf("client here");
         int sockfd;
