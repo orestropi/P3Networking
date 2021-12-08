@@ -97,7 +97,7 @@ return 0;
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
 int main(int argc, char** argv) {
-    if(!(argc == 0)){
+    if(argc >= 1){
     printf("client here");
         int sockfd;
     char buffer[MAXLINE];
