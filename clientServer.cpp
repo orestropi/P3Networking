@@ -27,10 +27,11 @@
 #include <netinet/udp.h>
 #include <arpa/inet.h>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char** argv) {
     //if statement to cal client or server function
     
-    if(argv[0] == (char*)1){
+    if(argv[0] == "1"){
+    printf("Hi I am this socket");	
     int sock = create_cs3516_socket();
     char buffer[40];
     struct ip *bob = (struct ip *)buffer;
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-    if(argv[0] == (char*)2){
+    if(argv[0] == "2"){
     //router
     int sock = create_cs3516_socket();
     while(1){
