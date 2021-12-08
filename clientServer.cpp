@@ -82,6 +82,7 @@ int main(int argc, char** argv) {
 return 0;
 }*/
 // Server side implementation of UDP client-server model
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -89,35 +90,7 @@ return 0;
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h> 
-#include <unistd.h> 
-#include <string.h> 
-#include <arpa/inet.h> 
-#include <string.h>
-#include "cs3516sock.hpp"
-#include <iostream>
-#include <pcap.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netinet/if_ether.h>
-#include <time.h>
-#include <map>
-#include <set>
-#include <linux/if_ether.h>
-#include <netinet/ether.h>
-#include <netinet/ip.h>
-#include <netinet/udp.h>
-#include <arpa/inet.h>   
+#include <netinet/in.h>  
 #define PORT     8080
 #define MAXLINE 1024
    
@@ -125,7 +98,7 @@ return 0;
 
 int main(int argc, char* argv[]) {
     
-    if(argc < 1){
+    if(argc < 2){
             printf("server here");
 
     int sockfd;
