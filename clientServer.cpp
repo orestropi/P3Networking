@@ -123,9 +123,9 @@ return 0;
    
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
     
-    if(argv[0] == "client"){
+    if(argc < 1){
             printf("server here");
 
     int sockfd;
