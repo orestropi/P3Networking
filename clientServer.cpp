@@ -156,9 +156,10 @@ int main(int argc, char* argv[]) {
 
     
 
-    //part 4 of roadmap incrementing ttl
+    //part 4 of roadmap incrementing ttl and logging it
     bob->ip_ttl--;
     if (bob->ip_ttl < 1){continue;}
+    printf("ttl incremented.\n"); 
 
 
     sendto(sockfd, (const char *)hello, strlen(hello), 
@@ -201,6 +202,17 @@ int main(int argc, char* argv[]) {
                 MSG_WAITALL, (struct sockaddr *) &servaddr,
                 fromlen2);
     buffer[n] = '\0';
+
+    //part 2 of roadmap generating random packet for transmission
+    struct ip *bob = (struct ip *)buffer;
+    struct udphdr *sally = (struct udphdr *)(buffer+20);
+    char* data = (buffer + 28);
+
+    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
+    bob->ip_dst = myaddress2;
+    sally->uh_sport = ntohs(5950);
+    strncpy(data,"hello world", 12);
+
     printf("Server : %s\n", buffer);
    
     close(sockfd);
