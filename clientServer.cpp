@@ -125,7 +125,7 @@ return 0;
 
 int main(int argc, char** argv) {
     
-    if(argc == 0){
+    if(argv[0] == "client"){
             printf("server here");
 
     int sockfd;
@@ -173,7 +173,7 @@ int main(int argc, char** argv) {
 
 
 
-    if(argc >= 1){
+    else{
     printf("client here");
         int sockfd;
     char buffer[MAXLINE];
