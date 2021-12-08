@@ -10,9 +10,9 @@ Then to run server run "./clientServer" in the folder directory
 
 Then (in a new terminal) run the client using "./clientServer <any paramater(s) you want>" in the folder directory
 
-As shown below a hello world message will be displayed showing how the program working
+As shown below a hello world message will be displayed showing how the program working, as well as logging the ttl increament
 
-![image](https://user-images.githubusercontent.com/73619173/145137516-5bf95095-9822-4f70-9157-cb969990d9ac.png)
+![image](https://user-images.githubusercontent.com/73619173/145138669-75ccf52a-9498-4d6b-a459-e052eb2af354.png)
 
 use make clean to delete all executables
 
