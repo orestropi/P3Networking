@@ -190,11 +190,11 @@ int main(int argc, char* argv[]) {
    if (newfile.is_open()){ //checking whether the file is open
       string tp;
       while(getline(newfile, tp)){ //read data from file object and put it into string.
-         cout << tp << "\n"; //print the data of the string, we can store this later
+         cout << "<--->" << tp << "<--->\n"; //print the data of the string, we can store this later
       }
       newfile.close(); //close the file object.
    }
-   fprintf(stdout, "%d", fileSize("send_body.txt"));
+   fprintf(stdout, "The siz of our file is: %d", fileSize("send_body.txt"));
     int sockfd;
     char buffer[MAXLINE];
     char *hello = "Hello World";
