@@ -94,15 +94,27 @@ return 0;
 #include <netinet/in.h> 
 #include <netinet/ip.h>
 #include <netinet/udp.h> 
+#include <fstream>
+#include <string>
+using namespace std;
 #define PORT     8080
 #define MAXLINE 3000
    
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
+#include <sys/stat.h>
+
+long fileSize(std::string filename)
+{
+    struct stat sB;
+    int rC = stat(filename.c_str(), &sB);
+    return rC == 0 ? sB.st_size : -1;
+}
+
 int main(int argc, char* argv[]) {
     
     if(argc < 2){
-            printf("server here\n");
+    printf("server here\n");
 
     int sockfd;
     char dest_buffer[MAXLINE];
@@ -172,7 +184,18 @@ int main(int argc, char* argv[]) {
 
     else{
     printf("client here\n");
-        int sockfd;
+    fstream newfile;
+    
+       newfile.open("send_body.txt",ios::in); //open a file to perform read operation using file object
+   if (newfile.is_open()){ //checking whether the file is open
+      string tp;
+      while(getline(newfile, tp)){ //read data from file object and put it into string.
+         cout << tp << "\n"; //print the data of the string, we can store this later
+      }
+      newfile.close(); //close the file object.
+   }
+   fprintf(stdout, "%d", fileSize("send_body.txt"));
+    int sockfd;
     char buffer[MAXLINE];
     char *hello = "Hello World";
     struct sockaddr_in     servaddr;
