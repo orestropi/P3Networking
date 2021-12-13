@@ -1,3 +1,13 @@
+/*
+the BST part is done. Each endhost / router will initialize one of these trees after opening the config file.
+Basically, upon parsing the config file contents, it needs to log each "Real address" behind the next step of the
+overlay addresses... I think. The real addresses are stored when reading the config files, so host 4 knows that each host / router is
+reached through the hop of router 1. Each overlay IP address should end with the real IP address of the connecting router.
+So when host 4 (IP 1.2.3.4) wants to send to host 5 (IP 5.6.7.8) it will iterate down into the binary tree for 5.6.7.8 and 
+find that it's already logged the address of the first connecting router (router 1). It then sends its packet to that router. 
+This process is repeated at each host / router until the final destination.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
