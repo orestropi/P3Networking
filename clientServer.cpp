@@ -184,6 +184,8 @@ int main(int argc, char* argv[]) {
 
     else{
     printf("client here\n");
+
+    //reading send_body
     fstream newfile;
     
        newfile.open("send_body.txt",ios::in); //open a file to perform read operation using file object
@@ -194,7 +196,10 @@ int main(int argc, char* argv[]) {
       }
       newfile.close(); //close the file object.
    }
-   fprintf(stdout, "The siz of our file is: %d", fileSize("send_body.txt"));
+   fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));
+    
+    
+    
     int sockfd;
     char buffer[MAXLINE];
     char *hello = "Hello World";
