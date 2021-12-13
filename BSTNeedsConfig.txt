@@ -1,0 +1,114 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+ struct node {
+	u_int32_t nextHopIP;
+	bool isSet;
+	struct node *zeroChild;
+	struct node *oneChild;
+};
+
+
+int main ()
+{
+    //ip address, fill from config
+  char str[] ="1.2.3.0//24";
+    // string we'll fill with info
+  char * pch;
+    
+  // strtok to get prefix / ip
+  printf ("Splitting string \"%s\" into tokens:\n",str);
+  
+  // getting ip in 4dot notation
+  pch = strtok (str,"/");
+  printf ("%s\n",pch);
+  // set router to proper number / direction
+  int n = ntohl(inet_addr(pch));
+  printf("%d\n", htonl(inet_addr(pch)));
+  
+  // get prefix length
+  pch = strtok (NULL,"/");
+   printf ("%s\n",pch);
+   int prefixLength;
+   prefixLength = atoi(pch);
+   
+   //create array to display binary nums
+  int binaryNum[32];
+  // by default all are 0
+  for(int i=0; i<32; i++){
+    binaryNum[i]=0;
+  }
+  // counter for binary array
+    int i = 0;
+    while (n > 0) {
+ 
+        // storing remainder in binary array
+        binaryNum[i] = n % 2;
+        n = n / 2;
+        i++;
+    }
+ 
+    // printing binary array in reverse order (right order)
+    for (int j = 31; j >= 32-prefixLength; j--)
+        printf("%d", binaryNum[j]);
+    printf ("\n");
+ 
+    // create starting node of tree
+    struct node *root = (struct node *) malloc(sizeof(struct node));
+    root->isSet=0;
+    root->zeroChild=NULL;
+    root->oneChild=NULL;
+ 
+    struct node *currentNode = root;
+    
+    for(int j=31; j>= 32-prefixLength; j--){
+	// determine if current ip number is bit 0 or 1
+	 if(binaryNum[j]=0){
+		// traverse and create node at zeroChild
+		if(currentNode->zeroChild==NULL) {
+		    // create a node same as before
+			currentNode->zeroChild = (struct node *) malloc(sizeof(struct node));
+			currentNode->zeroChild->isSet=0;
+			currentNode->zeroChild->zeroChild=NULL;
+			currentNode->zeroChild->oneChild=NULL;
+			
+			currentNode = currentNode->zeroChild;
+			continue;
+			}
+		else {
+		    // traverse to node currentNode = currentNode->zeroChild
+		    currentNode = currentNode->zeroChild;
+			continue;
+	    	}
+	 }
+	else if (binaryNum[j]=1){
+	// same as above, but with oneChild
+	    if(currentNode->oneChild==NULL) {
+		    // create a node same as before
+			currentNode->oneChild = (struct node *) malloc(sizeof(struct node));
+			currentNode->oneChild->isSet=0;
+			currentNode->oneChild->zeroChild=NULL;
+			currentNode->oneChild->oneChild=NULL;
+			
+			currentNode = currentNode->oneChild;
+			continue;
+			}
+		else {
+		    // traverse to node currentNode = currentNode->oneChild
+		    currentNode = currentNode->oneChild;
+			continue;
+	    	}
+	}
+    }
+    //set this IP address to the real address of destination
+    currentNode->isSet=1;
+    
+    //actualNextHopIP comes from config file
+    //currentNode->nextHopIP = actualNextHopIP;
+    
+  return 0;
+}
