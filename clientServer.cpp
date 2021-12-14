@@ -101,7 +101,8 @@ return 0;
 #include <iterator>
 using namespace std;
 #define MAXLINE 3000
-int PORT = 8080; //initial port, wiill be overwritten by send_config file
+int PORT = 8080;
+int 
 
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
@@ -239,7 +240,7 @@ if (file.is_open())
 char* routerCheck = "router";
     if(strcmp(argv[1], routerCheck) == 0){
     printf("server here\n");
-    fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
+    //fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
 //reading send_body    
 int indicator = 0;
 std::vector<std::string> sendConfig;
@@ -255,8 +256,8 @@ if (file.is_open())
     
     }}}}
 //setting port to what is on send_config file
-    printf("Our port number is: %d\n", stoi(sendConfig[2]));
-    PORT = stoi(sendConfig[2]);
+    //printf("Our port number is: %d\n", stoi(sendConfig[2]));
+    //PORT = stoi(sendConfig[2]);
     int sockfd;
     char dest_buffer[MAXLINE];
     char *hello = "Hello world";
@@ -360,8 +361,8 @@ if (file.is_open())
             sendConfig = split(line, ' ');
     
     }}
-    printf("Our port number is: %d\n", stoi(sendConfig[2]));
-    PORT = stoi(sendConfig[2]);
+    //printf("Our port number is: %d\n", stoi(sendConfig[2]));
+    //PORT = stoi(sendConfig[2]);
     newfile.open("send_body.txt",ios::in);
    if (newfile.is_open()){
       string tp;
@@ -382,8 +383,8 @@ if (file.is_open())
     in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
-    //source and destination port are the same
-    sally->uh_sport = stoi(sendConfig[2]);
+    //source and destination are sent form send_config file
+    sally->uh_sport = stoi(sendConfig[1]);
     sally->uh_dport =  stoi(sendConfig[2]);
 
     
