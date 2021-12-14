@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
 ifstream inFile;
 inFile.open("send_config.txt");
 
-int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
+int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE, idType2, QUEUE_LENGTH2, DEFAULT_TTL_VALUE2;
 
 
 while (inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE)
@@ -124,10 +124,13 @@ while (inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE)
     printf("idType: %d", idType);
     printf("queue length: %d", QUEUE_LENGTH);
     printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
+    idType2 = idType;
+    QUEUE_LENGTH2 = QUEUE_LENGTH;
+    DEFAULT_TTL_VALUE2 = DEFAULT_TTL_VALUE;
 }
-    printf("idType: %d", idType);
-    printf("queue length: %d", QUEUE_LENGTH);
-    printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
+    printf("idType: %d", idType2);
+    printf("queue length: %d", QUEUE_LENGTH2);
+    printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE2);
 
 int n2, idTypeLine2, ROUTER_ID;
 char* REAL_NETWORK_IP;
