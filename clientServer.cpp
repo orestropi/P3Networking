@@ -116,7 +116,6 @@ int main(int argc, char* argv[]) {
 
 int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
 
-if (!(infile >> n1)) { /* error, could not read first line! Abort. */ }
 
 while (infile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE)
 {
@@ -128,8 +127,6 @@ while (infile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE)
 
 int n2, idTypeLine2, ROUTER_ID;
 char* REAL_NETWORK_IP;
-
-if (!(infile >> n1 >> n2)) { /* error, could not read first line! Abort. */ }
 
 while (infile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP)
 {
