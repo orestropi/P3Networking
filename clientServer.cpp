@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
 int n1, n2, idType, queueLength, TTLValue, x3, x4;
 char c;
 
-if (!(infile >> n1 >> n2)) { /* error, could not read first line! Abort. */ }
+if (!(infile >> n1)) { /* error, could not read first line! Abort. */ }
 
 while (infile >> idType >> queueLength >> TTLValue)
 {
