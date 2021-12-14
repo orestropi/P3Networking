@@ -83,7 +83,7 @@ return 0;
 }*/
 // Server side implementation of UDP client-server model
 #include <iostream>
-
+#include <filesystem>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -112,6 +112,11 @@ long fileSize(std::string filename)
     struct stat sB;
     int rC = stat(filename.c_str(), &sB);
     return rC == 0 ? sB.st_size : -1;
+}
+
+inline bool fileExist (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
 }
 
 //Part of parsing code from Evan Teran
@@ -163,6 +168,7 @@ std::vector<std::string> link13;
 std::vector<std::string> link21;
 std::vector<std::string> link22;
 std::vector<std::string> link23;
+
 
 ifstream file("config.txt");
 if (file.is_open())
@@ -298,6 +304,19 @@ std::cout << "hi just test: "<<globalConfigOptions[1];
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     else{
     printf("client here\n");
     string dataToBeSent;
@@ -311,8 +330,14 @@ std::cout << "hi just test: "<<globalConfigOptions[1];
 
     in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
     bob->ip_dst = myaddress2;
-    sally->uh_sport = ntohs(5950);  
+    sally->uh_sport = ntohs(5950); 
 
+    int indicator = 0; 
+    fprintf(stdout, "The size of our file is: ");
+
+//reading send_body
+    while(indicator == 0){
+    if(fileExist("send_config.txt")){
     newfile.open("send_body.txt",ios::in);
    if (newfile.is_open()){
       string tp;
@@ -323,11 +348,10 @@ std::cout << "hi just test: "<<globalConfigOptions[1];
       newfile.close();
    }
    fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));
-
+   indicator++;
+   }
     strncpy(data, dataToBeSent.c_str(), dataToBeSent.size());
-    //reading send_body
-
-    
+    }
 
     
     
