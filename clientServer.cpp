@@ -164,7 +164,7 @@ std::vector<std::string> link21;
 std::vector<std::string> link22;
 std::vector<std::string> link23;
 
-ifstream file("send_config.txt");
+ifstream file("config.txt");
 if (file.is_open())
 {
 	string line;
