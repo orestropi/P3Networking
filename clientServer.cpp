@@ -120,13 +120,13 @@ int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE, idType2, QUEUE_LENGTH2, DEFAULT
 
 while (inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE)
 {
-    // successfully extracted one line, data is in x1, ..., x4, c.    
+    // successfully extracted one line, data is in x1, ..., x4, c.  
+    idType2 = idType;
+    QUEUE_LENGTH2 = QUEUE_LENGTH;
+    DEFAULT_TTL_VALUE2 = DEFAULT_TTL_VALUE;  
     printf("idType: %d", idType);
     printf("queue length: %d", QUEUE_LENGTH);
     printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
-    idType2 = idType;
-    QUEUE_LENGTH2 = QUEUE_LENGTH;
-    DEFAULT_TTL_VALUE2 = DEFAULT_TTL_VALUE;
 }
     printf("idType: %d", idType2);
     printf("queue length: %d", QUEUE_LENGTH2);
