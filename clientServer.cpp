@@ -122,7 +122,7 @@ if (!(infile >> n1)) { /* error, could not read first line! Abort. */ }
 while (infile >> idType >> queueLength >> TTLValue)
 {
     // successfully extracted one line, data is in x1, ..., x4, c.
-    printf("queue length: %d", infile);
+    printf("queue length: %d", TTLValue);
 }
 
 
