@@ -112,7 +112,20 @@ long fileSize(std::string filename)
 }
 
 int main(int argc, char* argv[]) {
-    
+    std::ifstream infile("send_config.txt");
+
+int n1, n2, idType, queueLength, TTLValue, x3, x4;
+char c;
+
+if (!(infile >> n1 >> n2)) { /* error, could not read first line! Abort. */ }
+
+while (infile >> idType >> queueLength >> TTLValue)
+{
+    // successfully extracted one line, data is in x1, ..., x4, c.
+    printf("queue length: %d", queueLength);
+}
+
+
     if(argc < 2){
     printf("server here\n");
 
