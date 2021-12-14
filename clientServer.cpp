@@ -114,17 +114,29 @@ long fileSize(std::string filename)
 int main(int argc, char* argv[]) {
     std::ifstream infile("send_config.txt");
 
-int n1, n2, idType, queueLength, TTLValue, x3, x4;
-char c;
+int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
 
 if (!(infile >> n1)) { /* error, could not read first line! Abort. */ }
 
-while (infile >> queueLength >> TTLValue >> idType)
+while (infile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE)
 {
     // successfully extracted one line, data is in x1, ..., x4, c.
 }
-    printf("queue length: %d", queueLength);
-    printf("TTLValue: %d", TTLValue);
+    printf("queue length: %d", QUEUE_LENGTH);
+    printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
+
+int n2, idTypeLine2, ROUTER_ID;
+char* REAL_NETWORK_IP;
+
+if (!(infile >> n1 >> n2)) { /* error, could not read first line! Abort. */ }
+
+while (infile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP)
+{
+    // successfully extracted one line, data is in x1, ..., x4, c.
+}
+    printf("ROUTER_ID: %d", ROUTER_ID);
+    printf("REAL_NETWORK_IP: %d", REAL_NETWORK_IP);
+
 
     if(argc < 2){
     printf("server here\n");
