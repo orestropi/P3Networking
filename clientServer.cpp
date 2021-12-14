@@ -100,7 +100,6 @@ return 0;
 #include <vector>
 #include <iterator>
 using namespace std;
-#define PORT     8080
 #define MAXLINE 3000
    
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
@@ -235,10 +234,26 @@ if (file.is_open())
         counter++;
     }
 }
-std::cout << "hi just test: "<<globalConfigOptions[1];
+//std::cout << "hi just test: "<<globalConfigOptions[1];
     if(argc < 2){
     printf("server here\n");
-
+//reading send_body    
+int indicator = 0;
+int PORT = 8080;
+std::vector<std::string> sendConfig;
+    while(indicator == 0){
+    if(fileExist("send_config.txt")){
+    ifstream file("send_config.txt");
+if (file.is_open())
+{
+	string line;
+	while (getline(file, line))
+    {
+            sendConfig = split(line, ' ');
+    
+    }}}}
+//setting port to what is on send_config file
+    PORT = stoi(sendConfig[2]);
     int sockfd;
     char dest_buffer[MAXLINE];
     char *hello = "Hello world";
@@ -333,11 +348,20 @@ std::cout << "hi just test: "<<globalConfigOptions[1];
     sally->uh_sport = ntohs(5950); 
 
     int indicator = 0; 
-    fprintf(stdout, "The size of our file is: ");
+    fprintf(stdout, "Waiting for send_config.txt ....");
 
-//reading send_body
+//reading send_body    
+std::vector<std::string> sendConfig;
     while(indicator == 0){
     if(fileExist("send_config.txt")){
+    ifstream file("send_config.txt");
+if (file.is_open())
+{
+	string line;
+	while (getline(file, line))
+    {
+            sendConfig = split(line, ' ');
+    }
     newfile.open("send_body.txt",ios::in);
    if (newfile.is_open()){
       string tp;
@@ -351,7 +375,7 @@ std::cout << "hi just test: "<<globalConfigOptions[1];
    indicator++;
    }
     strncpy(data, dataToBeSent.c_str(), dataToBeSent.size());
-    }
+    }}
 
     
     
