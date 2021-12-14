@@ -238,6 +238,7 @@ if (file.is_open())
 //std::cout << "hi just test: "<<globalConfigOptions[1];
     if(argc < 2){
     printf("server here\n");
+    fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using) ");
 //reading send_body    
 int indicator = 0;
 std::vector<std::string> sendConfig;
