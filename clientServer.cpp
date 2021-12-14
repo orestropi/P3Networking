@@ -114,7 +114,7 @@ long fileSize(std::string filename)
 int main(int argc, char* argv[]) {
     std::ifstream infile("send_config.txt");
 
-string n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
+int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
 
 if (!(infile >> n1)) { /* error, could not read first line! Abort. */ }
 
