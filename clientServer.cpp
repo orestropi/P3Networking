@@ -96,6 +96,9 @@ return 0;
 #include <netinet/udp.h> 
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
 using namespace std;
 #define PORT     8080
 #define MAXLINE 3000
@@ -111,6 +114,32 @@ long fileSize(std::string filename)
     return rC == 0 ? sB.st_size : -1;
 }
 
+//Part of parsing code from Evan Teran
+template <typename Out>
+void split(const std::string &s, char delim, Out result) {
+    std::istringstream iss(s);
+    std::string item;
+    while (std::getline(iss, item, delim)) {
+        *result++ = item;
+    }
+}
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
+void printVector(std::vector<std::string> hi){
+    int np;
+    std::string temp;
+    for (int i = 0; i< np; i++) {
+    std::cin >> temp;
+    hi.push_back(temp);
+    std::cout << hi[i] << endl;
+}
+
+}
 int main(int argc, char* argv[]) {
 // ifstream inFile;
 // inFile.open("send_config.txt");
@@ -130,19 +159,24 @@ int main(int argc, char* argv[]) {
 //     printf("idTypeLine2: %d", idTypeLine2);
 //     printf("ROUTER_ID: %d", ROUTER_ID);
 //     printf(REAL_NETWORK_IP);
-
+std::vector<std::string> globalConfigOptions;
 ifstream file("send_config.txt");
 if (file.is_open())
 {
 	string line;
+    int counter = 0;
 	while (getline(file, line))
     {
     	// note that the newline character is not included
         // in the getline() function
+        if(counter==0){
+            globalConfigOptions = split(line, ' ');
+        }
     	cout << line << endl;
+        counter++;
     }
 }
-
+printVector(globalConfigOptions);
     if(argc < 2){
     printf("server here\n");
 
