@@ -238,7 +238,7 @@ if (file.is_open())
 //std::cout << "hi just test: "<<globalConfigOptions[1];
     if(argc < 2){
     printf("server here\n");
-    fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using) ");
+    fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
 //reading send_body    
 int indicator = 0;
 std::vector<std::string> sendConfig;
@@ -254,7 +254,7 @@ if (file.is_open())
     
     }}}}
 //setting port to what is on send_config file
-    printf("Our port is: %d", stoi(sendConfig[2]));
+    printf("Our port number is: %d\n", stoi(sendConfig[2]));
     PORT = stoi(sendConfig[2]);
     int sockfd;
     char dest_buffer[MAXLINE];
@@ -335,23 +335,17 @@ if (file.is_open())
 
 
     else{
+    cout << argv[1] << "\n";
     printf("client here\n");
     string dataToBeSent;
     char buffer[1000];
     fstream newfile;
-    
-    //part 2 of roadmap generating random packet for transmission
+    int indicator = 0; 
+    fprintf(stdout, "Waiting for send_config.txt ....\n");
+        //part 2 of roadmap generating random packet for transmission
     struct ip *bob = (struct ip *)buffer;
     struct udphdr *sally = (struct udphdr *)(buffer+20);
     char* data = (buffer + 28);
-
-    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
-    bob->ip_dst = myaddress2;
-    sally->uh_sport = ntohs(5950); 
-
-    int indicator = 0; 
-    fprintf(stdout, "Waiting for send_config.txt ....");
-
 //reading send_body    
 std::vector<std::string> sendConfig;
     while(indicator == 0){
@@ -365,7 +359,7 @@ if (file.is_open())
             sendConfig = split(line, ' ');
     
     }}
-    printf("Our port is: %d", stoi(sendConfig[2]));
+    printf("Our port number is: %d\n", stoi(sendConfig[2]));
     PORT = stoi(sendConfig[2]);
     newfile.open("send_body.txt",ios::in);
    if (newfile.is_open()){
@@ -382,7 +376,16 @@ if (file.is_open())
    }
     }
 
-    
+
+
+    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
+    bob->ip_dst = myaddress2;
+    bob->ip_p =17;
+    bob->
+    //source and destination port are the same
+    sally->uh_sport = stoi(sendConfig[2]);
+    sally->uh_dport =  stoi(sendConfig[2]);
+
     
     
     int sockfd;
