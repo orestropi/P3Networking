@@ -171,7 +171,9 @@ if (file.is_open())
         // in the getline() function
         if(counter==0){
             globalConfigOptions = split(line, ' ');
+            printVector(globalConfigOptions);
         }
+        printVector(globalConfigOptions);
     	cout << line << endl;
         counter++;
     }
