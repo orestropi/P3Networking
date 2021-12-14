@@ -116,26 +116,20 @@ ifstream inFile;
 inFile.open("send_config.txt");
 
 int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
-
-
-while (inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE)
-{
+inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE;
     // successfully extracted one line, data is in x1, ..., x4, c.  
     printf("idType: %d", idType);
     printf("queue length: %d", QUEUE_LENGTH);
     printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
-}
 
 
 int n2, idTypeLine2, ROUTER_ID;
 char* REAL_NETWORK_IP;
 
-while (inFile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP)
-{
+inFile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP;
     printf("idTypeLine2: %d", idTypeLine2);
     printf("ROUTER_ID: %d", ROUTER_ID);
     printf(REAL_NETWORK_IP);
-}
 
 
 
