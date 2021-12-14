@@ -236,7 +236,8 @@ if (file.is_open())
     }
 }
 //std::cout << "hi just test: "<<globalConfigOptions[1];
-    if(argc < 2){
+char* routerCheck = "router";
+    if(argv[1] == routerCheck){
     printf("server here\n");
     fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
 //reading send_body    
