@@ -1,86 +1,3 @@
-/*#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h> 
-#include <unistd.h> 
-#include <string.h> 
-#include <arpa/inet.h> 
-#include <string.h>
-#include "cs3516sock.hpp"
-#include <iostream>
-#include <pcap.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netinet/if_ether.h>
-#include <time.h>
-#include <map>
-#include <set>
-#include <linux/if_ether.h>
-#include <netinet/ether.h>
-#include <netinet/ip.h>
-#include <netinet/udp.h>
-#include <arpa/inet.h>
-
-int main(int argc, char** argv) {
-    //if statement to cal client or server function
-    
-    if(argc == 0){
-    printf("Hi I am this socket");	
-    int sock = create_cs3516_socket(inet_addr("10.0.2.104"));
-    char buffer[40];
-    struct ip *bob = (struct ip *)buffer;
-    struct udphdr *sally = (struct udphdr *)(buffer+20);
-    char* data = (buffer + 28);
-    strncpy(data,"hello world", 12);
-
-    printf("Hi I am this socket, %d", sock);	
-    
-    //5 is next_hop
-    cs3516_send(sock, buffer, 40, (unsigned long)("1.2.3.1"));//("10.0.2.104", "1.2.3.1"));
-    }
-
-
-    if(argc >= 1){
-    //router
-    int sock = create_cs3516_socket(inet_addr("10.0.2.105"));
-    while(1){
-    char dest_buffer[3000];
-
-    int actual = cs3516_recv(sock, dest_buffer, 3000);
-    struct ip *bob = (struct ip *)dest_buffer;
-    struct udphdr *sally = (struct udphdr *)(dest_buffer+20);
-    char* data = (dest_buffer + 28);
-
-    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
-    bob->ip_dst = myaddress2;
-    sally->uh_sport = ntohs(5950);
-    printf(data);
-    strncpy(data,"hello world", 12);
-
-    //dont change addresses in Bob
-    bob->ip_ttl--;
-    if (bob->ip_ttl < 1){continue;}
-    //where 5 is a real address
-    in_addr myaddress = {.s_addr = inet_addr("10.0.2.104")};
-    if(bob->ip_dst.s_addr == myaddress.s_addr){
-        // then send to host X
-        cs3516_send(sock, dest_buffer, 40, (unsigned long)inet_ntoa(bob->ip_dst));//[5's real IP]);
-    }
-        else{
-            //send to host y
-        }	
-        
-        close(sock);
-}
-}
-return 0;
-}*/
 // Server side implementation of UDP client-server model
 #include <iostream>
 #include <filesystem>
@@ -101,7 +18,7 @@ return 0;
 #include <iterator>
 using namespace std;
 #define MAXLINE 3000
-int PORT = 8080;
+int PORT = 8080; //initial port, wiill be overwritten by send_config file
 
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
@@ -112,6 +29,110 @@ long fileSize(std::string filename)
     struct stat sB;
     int rC = stat(filename.c_str(), &sB);
     return rC == 0 ? sB.st_size : -1;
+}
+
+ struct node {
+	struct in_addr nextHopIP;
+	bool isSet;
+	struct node *zeroChild;
+	struct node *oneChild;
+};
+
+// func setTree(char* RealIP, char* voerlayIP, node* root)
+// takes overlay IP and set's it's next hop as the real next IP addr
+// applies changes to BST of root node, common across entire device.
+
+struct in_addr setTree(char realIP[], char overlayIP[], node* root){
+    
+    // string we'll fill with info
+  char * pch;
+    
+  // strtok to get prefix / ip
+  printf ("Splitting string \"%s\" into tokens:\n", overlayIP);
+  
+  // getting ip in 4dot notation
+  pch = strtok (overlayIP,"/");
+  printf ("%s\n",pch);
+  // set router to proper number / direction
+  int n = ntohl(inet_addr(pch));
+  printf("%d\n", htonl(inet_addr(pch)));
+  
+  // get prefix length
+  pch = strtok (NULL,"/");
+   printf ("%s\n",pch);
+   int prefixLength;
+   prefixLength = atoi(pch);
+   
+   //create array to display binary nums
+  int binaryNum[32];
+  // by default all are 0
+  for(int i=0; i<32; i++){
+    binaryNum[i]=0;
+  }
+  // counter for binary array
+    int i = 0;
+    while (n > 0) {
+ 
+        // storing remainder in binary array
+        binaryNum[i] = n % 2;
+        n = n / 2;
+        i++;
+    }
+ 
+    // printing binary array in reverse order (right order)
+    for (int j = 31; j >= 32-prefixLength; j--)
+        printf("%d", binaryNum[j]);
+    printf ("\n");
+ 
+    struct node *currentNode = root;
+    
+    for(int j=31; j>= 32-prefixLength; j--){
+	// determine if current ip number is bit 0 or 1
+	 if(binaryNum[j]=0){
+		// traverse and create node at zeroChild
+		if(currentNode->zeroChild==NULL) {
+		    // create a node same as before
+			currentNode->zeroChild = (struct node *) malloc(sizeof(struct node));
+			currentNode->zeroChild->isSet=0;
+			currentNode->zeroChild->zeroChild=NULL;
+			currentNode->zeroChild->oneChild=NULL;
+			
+			currentNode = currentNode->zeroChild;
+			continue;
+			}
+		else {
+		    // traverse to node currentNode = currentNode->zeroChild
+		    currentNode = currentNode->zeroChild;
+			continue;
+	    	}
+	 }
+	else if (binaryNum[j]=1){
+	// same as above, but with oneChild
+	    if(currentNode->oneChild==NULL) {
+		    // create a node same as before
+			currentNode->oneChild = (struct node *) malloc(sizeof(struct node));
+			currentNode->oneChild->isSet=0;
+			currentNode->oneChild->zeroChild=NULL;
+			currentNode->oneChild->oneChild=NULL;
+			
+			currentNode = currentNode->oneChild;
+			continue;
+			}
+		else {
+		    // traverse to node currentNode = currentNode->oneChild
+		    currentNode = currentNode->oneChild;
+			continue;
+	    	}
+	}
+    }
+    //set this IP address to the real address of destination
+    currentNode->isSet=1;
+    
+    //actualNextHopIP comes from config file
+    struct in_addr realIPAddr;
+    u_int32_t actualNextHopIP = inet_pton(AF_INET, realIP, &realIPAddr);
+    currentNode->nextHopIP = realIPAddr;
+    return currentNode->nextHopIP;
 }
 
 inline bool fileExist (const std::string& name) {
@@ -137,24 +158,6 @@ std::vector<std::string> split(const std::string &s, char delim) {
 
 
 int main(int argc, char* argv[]) {
-// ifstream inFile;
-// inFile.open("send_config.txt");
-
-// int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
-// inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE;
-//     // successfully extracted one line, data is in x1, ..., x4, c.  
-//     printf("idType: %d", idType);
-//     printf("queue length: %d", QUEUE_LENGTH);
-//     printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
-
-
-// int n2, idTypeLine2, ROUTER_ID;
-// char* REAL_NETWORK_IP;
-
-// inFile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP;
-//     printf("idTypeLine2: %d", idTypeLine2);
-//     printf("ROUTER_ID: %d", ROUTER_ID);
-//     printf(REAL_NETWORK_IP);
 std::vector<std::string> globalConfigOptions;
 std::vector<std::string> router1;
 std::vector<std::string> router2;
@@ -170,7 +173,16 @@ std::vector<std::string> link22;
 std::vector<std::string> link23;
 
 
-ifstream file("config.txt");
+
+int meshNum = atoi(argv[2]);    // which machine are we dealing with
+
+    // create starting node of tree
+    struct node *root = (struct node *) malloc(sizeof(struct node));
+    root->isSet=0;
+    root->zeroChild=NULL;
+    root->oneChild=NULL;
+
+ifstream file("send_config.txt");
 if (file.is_open())
 {
 	string line;
@@ -181,65 +193,101 @@ if (file.is_open())
         // in the getline() function
         if(counter==0){
             globalConfigOptions = split(line, ' ');
-            //printf("line 1: ");
+            printf("line 1: ");
         }
         if(counter==1){
             router1 = split(line, ' ');
-            //printf("line 2: ");
+            printf("line 2: ");
+            //setTree(router1[realIP], router1[realIP], root)
+             setTree(strcpy(new char[router1[2].length() + 1], router1[2].c_str()), strcpy(new char[router1[2].length() + 1], router1[2].c_str()), root);
         }
         if(counter==2){
             router2 = split(line, ' ');
-            //printf("line 3: ");
+            printf("line 3: ");
+            setTree(strcpy(new char[router2[2].length() + 1], router2[2].c_str()), strcpy(new char[router2[2].length() + 1], router2[2].c_str()), root);
         }
         if(counter==3){
             router3 = split(line, ' ');
-            //printf("line 4: ");
+            printf("line 4: ");
+            setTree(strcpy(new char[router3[2].length() + 1], router3[2].c_str()), strcpy(new char[router3[2].length() + 1], router3[2].c_str()), root);
         }
         if(counter==4){
             host1 = split(line, ' ');
-            //printf("line 5: ");
+            printf("line 5: ");
+            //setTree(host1[realIP], host1[overlayIP], root)
+             setTree(strcpy(new char[host1[2].length() + 1], host1[2].c_str()), strcpy(new char[host1[3].length() + 1], host1[3].c_str()), root);
         }
         if(counter==5){
             host2 = split(line, ' ');
-            //printf("line 6: ");
+            printf("line 6: ");
+            setTree(strcpy(new char[host2[2].length() + 1], host2[2].c_str()), strcpy(new char[host2[3].length() + 1], host2[3].c_str()), root);
         }
         if(counter==6){
             host3 = split(line, ' ');
-            //printf("line 7: ");
+            printf("line 7: ");
+            setTree(strcpy(new char[host3[2].length() + 1], host3[2].c_str()), strcpy(new char[host3[3].length() + 1], host3[3].c_str()), root);
         }
         if(counter==7){
             link11 = split(line, ' ');
-            //printf("line 8: ");
+            printf("line 8: ");
         }
         if(counter==8){
             link12 = split(line, ' ');
-            //printf("line 9: ");
+            printf("line 9: ");
         }
         if(counter==9){
             link13 = split(line, ' ');
-            //printf("line 10: ");
+            printf("line 10: ");
         }
         if(counter==10){
             link21 = split(line, ' ');
-            //printf("line 11: ");
+            printf("line 11: ");
+            
+            // if this is router 1 set host 4's overlay address to host 4's real address.
+            if(meshNum == stoi(link21[1])){
+                 setTree(strcpy(new char[host1[2].length() + 1], host1[2].c_str()), strcpy(new char[link21[3].length() + 1], link21[3].c_str()), root);
+            }
+            // if not router 1 set host 4's overlay address to router 1's real address
+            else
+                 setTree(strcpy(new char[router1[2].length() + 1], router1[2].c_str()), strcpy(new char[link21[3].length() + 1], link21[3].c_str()), root);
+            
         }
         if(counter==11){
             link22 = split(line, ' ');
-            //printf("line 12: ");
+            printf("line 12: ");
+            
+            // if this is router 2 set host 5's overlay address to host 5's real address.
+             if(meshNum ==  stoi(link22[1]))
+                 setTree(strcpy(new char[host2[2].length() + 1], host2[2].c_str()), strcpy(new char[link22[3].length() + 1], link22[3].c_str()), root);
+            // if not router 2 set host 5's overlay address to router 2's real address
+            else
+                setTree(strcpy(new char[router2[2].length() + 1], router2[2].c_str()), strcpy(new char[link22[3].length() + 1], link22[3].c_str()), root);
         }
         if(counter==12){
             link23 = split(line, ' ');
-            //printf("line 13: ");
+            printf("line 13: ");
+            
+            // if this is router 3 set host 6's overlay address to host 6's real address.
+             if(meshNum ==  stoi(link23[1])){
+                 // converting strings into char*s, running through tree like that
+                 setTree(strcpy(new char[host3[2].length() + 1], host3[2].c_str()), strcpy(new char[link23[3].length() + 1], link23[3].c_str()), root);
+             }
+            // if not router 3 set host 6's overlay address to router 3's real address
+            else
+                setTree(strcpy(new char[router3[2].length() + 1], router3[2].c_str()), strcpy(new char[link23[3].length() + 1], link23[3].c_str()), root);
         }         
     	cout << line << endl;
         counter++;
     }
 }
+    // at lines 5 6 7 fill tree with faux data
+    // at lines 11 12 13 fill tree with real data
+
 //std::cout << "hi just test: "<<globalConfigOptions[1];
 char* routerCheck = "router";
     if(strcmp(argv[1], routerCheck) == 0){
     printf("server here\n");
-    //fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
+    fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
 //reading send_body    
 int indicator = 0;
 std::vector<std::string> sendConfig;
@@ -255,8 +303,8 @@ if (file.is_open())
     
     }}}}
 //setting port to what is on send_config file
-    //printf("Our port number is: %d\n", stoi(sendConfig[2]));
-    //PORT = stoi(sendConfig[2]);
+    printf("Our port number is: %d\n", stoi(sendConfig[2]));
+    PORT = stoi(sendConfig[2]);
     int sockfd;
     char dest_buffer[MAXLINE];
     char *hello = "Hello world";
@@ -360,8 +408,8 @@ if (file.is_open())
             sendConfig = split(line, ' ');
     
     }}
-    //printf("Our port number is: %d\n", stoi(sendConfig[2]));
-    //PORT = stoi(sendConfig[2]);
+    printf("Our port number is: %d\n", stoi(sendConfig[2]));
+    PORT = stoi(sendConfig[2]);
     newfile.open("send_body.txt",ios::in);
    if (newfile.is_open()){
       string tp;
@@ -382,8 +430,8 @@ if (file.is_open())
     in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
-    //source and destination are sent form send_config file
-    sally->uh_sport = stoi(sendConfig[1]);
+    //source and destination port are the same
+    sally->uh_sport = stoi(sendConfig[2]);
     sally->uh_dport =  stoi(sendConfig[2]);
 
     
