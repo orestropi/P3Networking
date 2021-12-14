@@ -130,15 +130,6 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-void printVector(std::vector<std::string> hi){
-    int np;
-    std::string temp;
-    for (int i = 0; i< np; i++) {
-    std::cin >> temp;
-    hi.push_back(temp);
-    std::cout << hi[i] << endl;
-}
-
 }
 int main(int argc, char* argv[]) {
 // ifstream inFile;
@@ -171,14 +162,13 @@ if (file.is_open())
         // in the getline() function
         if(counter==0){
             globalConfigOptions = split(line, ' ');
-            printVector(globalConfigOptions);
+            printf("line 1");
         }
-        printVector(globalConfigOptions);
     	cout << line << endl;
         counter++;
     }
 }
-printVector(globalConfigOptions);
+std::cout << globalConfigOptions[0];
     if(argc < 2){
     printf("server here\n");
 
