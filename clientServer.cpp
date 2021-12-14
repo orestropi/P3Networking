@@ -381,7 +381,6 @@ if (file.is_open())
     in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
-    bob->
     //source and destination port are the same
     sally->uh_sport = stoi(sendConfig[2]);
     sally->uh_dport =  stoi(sendConfig[2]);
