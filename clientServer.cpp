@@ -333,6 +333,7 @@ std::cout << "hi just test: "<<globalConfigOptions[1];
     
     
     int sockfd;
+    struct sockaddr_in servaddr;
     // char buffer[MAXLINE];
     // char *hello = "Hello World";
     // struct sockaddr_in     servaddr;
