@@ -112,26 +112,36 @@ long fileSize(std::string filename)
 }
 
 int main(int argc, char* argv[]) {
-ifstream inFile;
-inFile.open("send_config.txt");
+// ifstream inFile;
+// inFile.open("send_config.txt");
 
-int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
-inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE;
-    // successfully extracted one line, data is in x1, ..., x4, c.  
-    printf("idType: %d", idType);
-    printf("queue length: %d", QUEUE_LENGTH);
-    printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
-
-
-int n2, idTypeLine2, ROUTER_ID;
-char* REAL_NETWORK_IP;
-
-inFile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP;
-    printf("idTypeLine2: %d", idTypeLine2);
-    printf("ROUTER_ID: %d", ROUTER_ID);
-    printf(REAL_NETWORK_IP);
+// int n1, idType, QUEUE_LENGTH, DEFAULT_TTL_VALUE;
+// inFile >> idType >> QUEUE_LENGTH >> DEFAULT_TTL_VALUE;
+//     // successfully extracted one line, data is in x1, ..., x4, c.  
+//     printf("idType: %d", idType);
+//     printf("queue length: %d", QUEUE_LENGTH);
+//     printf("DEFAULT_TTL_VALUE: %d", DEFAULT_TTL_VALUE);
 
 
+// int n2, idTypeLine2, ROUTER_ID;
+// char* REAL_NETWORK_IP;
+
+// inFile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP;
+//     printf("idTypeLine2: %d", idTypeLine2);
+//     printf("ROUTER_ID: %d", ROUTER_ID);
+//     printf(REAL_NETWORK_IP);
+
+ifstream file("send_config.txt");
+if (file.is_open())
+{
+	string line;
+	while (getline(file, line))
+    {
+    	// note that the newline character is not included
+        // in the getline() function
+    	cout << line << endl;
+    }
+}
 
     if(argc < 2){
     printf("server here\n");
@@ -204,6 +214,7 @@ inFile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP;
 
     else{
     printf("client here\n");
+    string dataToBeSent;
 
     //reading send_body
     fstream newfile;
@@ -213,6 +224,7 @@ inFile >> idTypeLine2 >> ROUTER_ID >> REAL_NETWORK_IP;
       string tp;
       while(getline(newfile, tp)){ //read data from file object and put it into string.
          cout << "<--->" << tp << "<--->\n"; //print the data of the string, we can store this later
+         dataToBeSent = tp;
       }
       newfile.close(); //close the file object.
    }
