@@ -151,6 +151,20 @@ int main(int argc, char* argv[]) {
 //     printf("ROUTER_ID: %d", ROUTER_ID);
 //     printf(REAL_NETWORK_IP);
 std::vector<std::string> globalConfigOptions;
+std::vector<std::string> router1;
+std::vector<std::string> router2;
+std::vector<std::string> router3;
+std::vector<std::string> host1;
+std::vector<std::string> host2;
+std::vector<std::string> host3;
+std::vector<std::string> link11;
+std::vector<std::string> link12;
+std::vector<std::string> link13;
+std::vector<std::string> link21;
+std::vector<std::string> link21;
+std::vector<std::string> link22;
+std::vector<std::string> link23;
+
 ifstream file("send_config.txt");
 if (file.is_open())
 {
@@ -162,13 +176,61 @@ if (file.is_open())
         // in the getline() function
         if(counter==0){
             globalConfigOptions = split(line, ' ');
-            printf("line 1");
+            printf("line 1: ");
         }
+        if(counter==1){
+            router1 = split(line, ' ');
+            printf("line 2: ");
+        }
+        if(counter==2){
+            router2 = split(line, ' ');
+            printf("line 3: ");
+        }
+        if(counter==3){
+            router3 = split(line, ' ');
+            printf("line 4: ");
+        }
+        if(counter==4){
+            host1 = split(line, ' ');
+            printf("line 5: ");
+        }
+        if(counter==5){
+            host2 = split(line, ' ');
+            printf("line 6: ");
+        }
+        if(counter==6){
+            host3 = split(line, ' ');
+            printf("line 7: ");
+        }
+        if(counter==7){
+            link11 = split(line, ' ');
+            printf("line 8: ");
+        }
+        if(counter==8){
+            link12 = split(line, ' ');
+            printf("line 9: ");
+        }
+        if(counter==9){
+            link13 = split(line, ' ');
+            printf("line 10: ");
+        }
+        if(counter==10){
+            link21 = split(line, ' ');
+            printf("line 11: ");
+        }
+        if(counter==11){
+            link22 = split(line, ' ');
+            printf("line 12: ");
+        }
+        if(counter==12){
+            link23 = split(line, ' ');
+            printf("line 13: ");
+        }         
     	cout << line << endl;
         counter++;
     }
 }
-std::cout << "hi just test: "<<globalConfigOptions[1];
+//std::cout << "hi just test: "<<globalConfigOptions[1];
     if(argc < 2){
     printf("server here\n");
 
