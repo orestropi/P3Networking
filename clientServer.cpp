@@ -130,7 +130,7 @@ std::vector<std::string> split(const std::string &s, char delim) {
     return elems;
 }
 
-}
+
 int main(int argc, char* argv[]) {
 // ifstream inFile;
 // inFile.open("send_config.txt");
