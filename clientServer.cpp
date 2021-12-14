@@ -229,7 +229,7 @@ if (file.is_open())
         counter++;
     }
 }
-//std::cout << "hi just test: "<<globalConfigOptions[1];
+std::cout << "hi just test: "<<globalConfigOptions[1];
     if(argc < 2){
     printf("server here\n");
 
@@ -298,31 +298,44 @@ if (file.is_open())
 
 
 
-
     else{
     printf("client here\n");
     string dataToBeSent;
-
-    //reading send_body
+    char buffer[1000];
     fstream newfile;
     
-       newfile.open("send_body.txt",ios::in); //open a file to perform read operation using file object
-   if (newfile.is_open()){ //checking whether the file is open
+    //part 2 of roadmap generating random packet for transmission
+    struct ip *bob = (struct ip *)buffer;
+    struct udphdr *sally = (struct udphdr *)(buffer+20);
+    char* data = (buffer + 28);
+
+    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
+    bob->ip_dst = myaddress2;
+    sally->uh_sport = ntohs(5950);  
+
+    newfile.open("send_body.txt",ios::in);
+   if (newfile.is_open()){
       string tp;
-      while(getline(newfile, tp)){ //read data from file object and put it into string.
-         cout << "<--->" << tp << "<--->\n"; //print the data of the string, we can store this later
+      while(getline(newfile, tp)){
+         cout << "<--->" << tp << "<--->\n";
          dataToBeSent = tp;
       }
-      newfile.close(); //close the file object.
+      newfile.close();
    }
    fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));
+
+    strncpy(data, dataToBeSent.c_str(), dataToBeSent.size());
+    //reading send_body
+
+    
+
     
     
     
     int sockfd;
-    char buffer[MAXLINE];
-    char *hello = "Hello World";
-    struct sockaddr_in     servaddr;
+    // char buffer[MAXLINE];
+    // char *hello = "Hello World";
+    // struct sockaddr_in     servaddr;
    
     // Creating socket file descriptor
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
@@ -340,7 +353,7 @@ if (file.is_open())
     int n, len;
     socklen_t * fromlen2;//added
   
-    sendto(sockfd, (const char *)hello, strlen(hello),
+    sendto(sockfd, (const char *)data, strlen(data),
         MSG_CONFIRM, (const struct sockaddr *) &servaddr, 
             sizeof(servaddr));
     printf("Hello message sent.\n");
@@ -348,17 +361,7 @@ if (file.is_open())
     n = recvfrom(sockfd, (char *)buffer, MAXLINE, 
                 MSG_WAITALL, (struct sockaddr *) &servaddr,
                 fromlen2);
-    buffer[n] = '\0';
-
-    //part 2 of roadmap generating random packet for transmission
-    struct ip *bob = (struct ip *)buffer;
-    struct udphdr *sally = (struct udphdr *)(buffer+20);
-    char* data = (buffer + 28);
-
-    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
-    bob->ip_dst = myaddress2;
-    sally->uh_sport = ntohs(5950);
-    strncpy(data,"hello world", 12);
+    
 
     printf("Server : %s\n", buffer);
    
