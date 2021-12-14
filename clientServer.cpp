@@ -101,7 +101,8 @@ return 0;
 #include <iterator>
 using namespace std;
 #define MAXLINE 3000
-   
+int PORT = 8080; //initial port, wiill be overwritten by send_config file
+
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
 #include <sys/stat.h>
@@ -239,7 +240,6 @@ if (file.is_open())
     printf("server here\n");
 //reading send_body    
 int indicator = 0;
-int PORT = 8080;
 std::vector<std::string> sendConfig;
     while(indicator == 0){
     if(fileExist("send_config.txt")){
@@ -253,6 +253,7 @@ if (file.is_open())
     
     }}}}
 //setting port to what is on send_config file
+    printf("Our port is: %d", stoi(sendConfig[2]));
     PORT = stoi(sendConfig[2]);
     int sockfd;
     char dest_buffer[MAXLINE];
@@ -353,7 +354,7 @@ if (file.is_open())
 //reading send_body    
 std::vector<std::string> sendConfig;
     while(indicator == 0){
-    if(fileExist("send_config.txt")){
+   if(fileExist("send_config.txt")){
     ifstream file("send_config.txt");
 if (file.is_open())
 {
@@ -361,7 +362,10 @@ if (file.is_open())
 	while (getline(file, line))
     {
             sendConfig = split(line, ' ');
-    }
+    
+    }}
+    printf("Our port is: %d", stoi(sendConfig[2]));
+    PORT = stoi(sendConfig[2]);
     newfile.open("send_body.txt",ios::in);
    if (newfile.is_open()){
       string tp;
@@ -371,11 +375,11 @@ if (file.is_open())
       }
       newfile.close();
    }
-   fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));
+   fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));    
+   strncpy(data, dataToBeSent.c_str(), dataToBeSent.size());
    indicator++;
    }
-    strncpy(data, dataToBeSent.c_str(), dataToBeSent.size());
-    }}
+    }
 
     
     
