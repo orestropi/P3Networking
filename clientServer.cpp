@@ -168,7 +168,7 @@ if (file.is_open())
         counter++;
     }
 }
-std::cout << globalConfigOptions[0];
+std::cout << "hi just test: "<<globalConfigOptions[1];
     if(argc < 2){
     printf("server here\n");
 
