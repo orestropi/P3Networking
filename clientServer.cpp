@@ -298,11 +298,6 @@ if(strcmp(argv[2], router2sw) == 0){
 if(strcmp(argv[2], router3sw) == 0){
     ourRouterAddress = inet_addr(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
 }
-printf(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
-printf(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
-printf(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
-printf(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
-printf(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
 
     // at lines 5 6 7 fill tree with faux data
     // at lines 11 12 13 fill tree with real data
@@ -345,7 +340,7 @@ char* routerCheck = "router";
        
     // Filling server information
     servaddr.sin_family    = AF_INET; // IPv4
-    servaddr.sin_addr.s_addr = ourRouterAddress;
+    servaddr.sin_addr.s_addr = inet_addr("10.0.2.103");
     servaddr.sin_port = htons(PORT);
        
     // Bind the socket with the server address
