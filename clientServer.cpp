@@ -52,10 +52,10 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
   
   // getting ip in 4dot notation
   pch = strtok (overlayIP,"/");
-  printf ("%s\n",pch);
+  printf ("This is our IP in 4Dot Notation : %s\n",pch);
   // set router to proper number / direction
   int n = ntohl(inet_addr(pch));
-  printf("%d\n", htonl(inet_addr(pch)));
+  printf("This is our IP in decimal : %d\n", htonl(inet_addr(pch)));
   
   // get prefix length
   pch = strtok (NULL,"/"); 
@@ -64,7 +64,7 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 		prefixLength=32;
 	}
 	else{
-   printf ("%s\n",pch);
+   printf ("Here's how long our IP's prefix length is : %s\n",pch);
    prefixLength = atoi(pch);
 	}
    
@@ -85,6 +85,7 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
     }
  
     // printing binary array in reverse order (right order)
+    printf ("Here's our IP in binary : ");
     for (int j = 31; j >= 32-prefixLength; j--)
         printf("%d", binaryNum[j]);
     printf ("\n");
@@ -130,6 +131,7 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 	    	}
 	}
     }
+    printf("\n");
     //set this IP address to the real address of destination
     currentNode->isSet=1;
     
@@ -192,6 +194,8 @@ if (file.is_open())
 {
 	string line;
     int counter = 0;
+    char realIP[16];
+    char overlayIP[16];
 	while (getline(file, line))
     {
     	// note that the newline character is not included
@@ -204,33 +208,45 @@ if (file.is_open())
             router1 = split(line, ' ');
             printf("line 2: ");
             //setTree(router1[realIP], router1[realIP], root)
-             setTree(strcpy(new char[router1[2].length() + 1], router1[2].c_str()), strcpy(new char[router1[2].length() + 1], router1[2].c_str()), root, true);
+            strcpy(realIP, router1[2].c_str());
+            strcpy(overlayIP, router1[2].c_str());
+             setTree(realIP, overlayIP, root, true);
         }
         if(counter==2){
             router2 = split(line, ' ');
             printf("line 3: ");
-            setTree(strcpy(new char[router2[2].length() + 1], router2[2].c_str()), strcpy(new char[router2[2].length() + 1], router2[2].c_str()), root, true);
+            strcpy(realIP, router2[2].c_str());
+            strcpy(overlayIP, router2[2].c_str());
+             setTree(realIP, overlayIP, root, true);
         }
         if(counter==3){
             router3 = split(line, ' ');
             printf("line 4: ");
-            setTree(strcpy(new char[router3[2].length() + 1], router3[2].c_str()), strcpy(new char[router3[2].length() + 1], router3[2].c_str()), root, true);
+            strcpy(realIP, router3[2].c_str());
+            strcpy(overlayIP, router3[2].c_str());
+             setTree(realIP, overlayIP, root, true);
         }
         if(counter==4){
             host1 = split(line, ' ');
             printf("line 5: ");
             //setTree(host1[realIP], host1[overlayIP], root)
-             setTree(strcpy(new char[host1[2].length() + 1], host1[2].c_str()), strcpy(new char[host1[3].length() + 1], host1[3].c_str()), root, true);
+             strcpy(realIP, host1[2].c_str());
+            strcpy(overlayIP, host1[3].c_str());
+             setTree(realIP, overlayIP, root, true);
         }
         if(counter==5){
             host2 = split(line, ' ');
             printf("line 6: ");
-            setTree(strcpy(new char[host2[2].length() + 1], host2[2].c_str()), strcpy(new char[host2[3].length() + 1], host2[3].c_str()), root, true);
+             strcpy(realIP, host1[2].c_str());
+            strcpy(overlayIP, host1[3].c_str());
+             setTree(realIP, overlayIP, root, true);
         }
         if(counter==6){
             host3 = split(line, ' ');
             printf("line 7: ");
-            setTree(strcpy(new char[host3[2].length() + 1], host3[2].c_str()), strcpy(new char[host3[3].length() + 1], host3[3].c_str()), root, true);
+             strcpy(realIP, host1[2].c_str());
+            strcpy(overlayIP, host1[3].c_str());
+             setTree(realIP, overlayIP, root, true);
         }
         if(counter==7){
             link11 = split(line, ' ');
