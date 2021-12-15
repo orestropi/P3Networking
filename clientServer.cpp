@@ -32,6 +32,7 @@ long fileSize(std::string filename)
 
  struct node {
 	struct in_addr nextHopIP;
+    struct in_addr currentMostRecent;
 	bool isSet;
 	struct node *zeroChild;
 	struct node *oneChild;
@@ -74,10 +75,9 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
   for(int i=0; i<32; i++){
     binaryNum[i]=0;
   }
-  // counter for binary array
+
     int i = 0;
     while (n > 0) {
- 
         // storing remainder in binary array
         binaryNum[i] = n % 2;
         n = n / 2;
@@ -97,8 +97,9 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 	 if(binaryNum[j]=0){
 		// traverse and create node at zeroChild
 		if(currentNode->zeroChild==NULL) {
-		    // create a node same as before
+		    // create a node 
 			currentNode->zeroChild = (struct node *) malloc(sizeof(struct node));
+            currentNode->zeroChild->currentMostRecent = currentNode->currentMostRecent;
 			currentNode->zeroChild->isSet=0;
 			currentNode->zeroChild->zeroChild=NULL;
 			currentNode->zeroChild->oneChild=NULL;
@@ -108,6 +109,9 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 			}
 		else {
 		    // traverse to node currentNode = currentNode->zeroChild
+            if(!currentNode->isSet && currentNode->zeroChild->isSet){
+                currentNode->zeroChild->currentMostRecent = currentNode->zeroChild->nextHopIP;
+            }
 		    currentNode = currentNode->zeroChild;
 			continue;
 	    	}
@@ -117,7 +121,8 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 	    if(currentNode->oneChild==NULL) {
 		    // create a node same as before
 			currentNode->oneChild = (struct node *) malloc(sizeof(struct node));
-			currentNode->oneChild->isSet=0;
+            currentNode->oneChild->currentMostRecent = currentNode->currentMostRecent;
+            currentNode->oneChild->isSet=0;
 			currentNode->oneChild->zeroChild=NULL;
 			currentNode->oneChild->oneChild=NULL;
 			
@@ -126,20 +131,27 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 			}
 		else {
 		    // traverse to node currentNode = currentNode->oneChild
+            if(!currentNode->isSet && currentNode->oneChild->isSet){
+                currentNode->oneChild->currentMostRecent = currentNode->oneChild->nextHopIP;
+            }
 		    currentNode = currentNode->oneChild;
 			continue;
 	    	}
 	}
     }
-    printf("\n");
     //set this IP address to the real address of destination
     currentNode->isSet=1;
     
     //actualNextHopIP comes from config file
-    struct in_addr realIPAddr;
-    u_int32_t actualNextHopIP = inet_pton(AF_INET, realIP, &realIPAddr);
-    currentNode->nextHopIP = realIPAddr;
-    return currentNode->nextHopIP;
+    if(SetValue){
+        struct in_addr realIPAddr;
+        u_int32_t actualNextHopIP = inet_pton(AF_INET, realIP, &realIPAddr);
+        currentNode->nextHopIP = realIPAddr;
+        currentNode->currentMostRecent = realIPAddr;
+        return currentNode->currentMostRecent;
+    }
+    else
+        return currentNode->currentMostRecent;
 }
 
 inline bool fileExist (const std::string& name) {
@@ -185,6 +197,7 @@ int meshNum = atoi(argv[2]);    // which machine are we dealing with? (1,2,3 are
 
     // create starting node of tree
     struct node *root = (struct node *) malloc(sizeof(struct node));
+    root->currentMostRecent;
     root->isSet=0;
     root->zeroChild=NULL;
     root->oneChild=NULL;
@@ -210,21 +223,27 @@ if (file.is_open())
             //setTree(router1[realIP], router1[realIP], root)
             strcpy(realIP, router1[2].c_str());
             strcpy(overlayIP, router1[2].c_str());
-             setTree(realIP, overlayIP, root, true);
+            printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }
         if(counter==2){
             router2 = split(line, ' ');
             printf("line 3: ");
             strcpy(realIP, router2[2].c_str());
             strcpy(overlayIP, router2[2].c_str());
-             setTree(realIP, overlayIP, root, true);
+            printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }
         if(counter==3){
             router3 = split(line, ' ');
             printf("line 4: ");
             strcpy(realIP, router3[2].c_str());
             strcpy(overlayIP, router3[2].c_str());
-             setTree(realIP, overlayIP, root, true);
+            printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }
         if(counter==4){
             host1 = split(line, ' ');
@@ -232,21 +251,27 @@ if (file.is_open())
             //setTree(host1[realIP], host1[overlayIP], root)
              strcpy(realIP, host1[2].c_str());
             strcpy(overlayIP, host1[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+            printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }
         if(counter==5){
             host2 = split(line, ' ');
             printf("line 6: ");
              strcpy(realIP, host2[2].c_str());
             strcpy(overlayIP, host2[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+            printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }
         if(counter==6){
             host3 = split(line, ' ');
             printf("line 7: ");
             strcpy(realIP, host3[2].c_str());
             strcpy(overlayIP, host3[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+            printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }
         if(counter==7){
             link11 = split(line, ' ');
@@ -268,13 +293,18 @@ if (file.is_open())
             if(meshNum == stoi(link21[1])){
                  strcpy(realIP, host1[2].c_str());
                 strcpy(overlayIP, link21[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+             printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
             }
             // if not router 1 set host 4's overlay address to router 1's real address
-            else
+            else if (meshNum != stoi(link21[1])){
                   strcpy(realIP, router1[2].c_str());
                 strcpy(overlayIP, link21[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+             printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
+        }
             
         }
         if(counter==11){
@@ -285,13 +315,17 @@ if (file.is_open())
              if(meshNum ==  stoi(link22[1])) {
                   strcpy(realIP, host2[2].c_str());
                 strcpy(overlayIP, link22[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+             printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
              }
             // if not router 2 set host 5's overlay address to router 2's real address
             else
                   strcpy(realIP, router2[2].c_str());
                 strcpy(overlayIP, link22[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+             printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }
         if(counter==12){
             link23 = split(line, ' ');
@@ -302,13 +336,17 @@ if (file.is_open())
                  // converting strings into char*s, running through tree like that
                  strcpy(realIP, host3[2].c_str());
                 strcpy(overlayIP, link23[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+             printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
              }
             // if not router 3 set host 6's overlay address to router 3's real address
             else
                 strcpy(realIP, router3[2].c_str());
                 strcpy(overlayIP, link23[3].c_str());
-             setTree(realIP, overlayIP, root, true);
+             printf("\n");
+             printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
+             printf("\n");
         }         
     	cout << line << endl;
         counter++;
@@ -358,7 +396,7 @@ char* routerCheck = "router";
     int sockfd;
     char dest_buffer[MAXLINE];
     char *hello = "Hello world";
-    struct sockaddr_in servaddr, cliaddr;
+    struct sockaddr_in servaddr, cliaddr, nextHopAddr;
        
     // Creating socket file descriptor
     if ( (sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
@@ -370,6 +408,7 @@ char* routerCheck = "router";
 
     memset(&servaddr, 0, sizeof(servaddr));
     memset(&cliaddr, 0, sizeof(cliaddr));
+    memset(&nextHopAddr, 0, sizeof(nextHopAddr));
     
 
     // Filling server information
@@ -385,7 +424,7 @@ char* routerCheck = "router";
         exit(EXIT_FAILURE);
     }
        
-    int len, n;
+    int len, n, sendLen;
    
     len = sizeof(cliaddr);  //len is value/resuslt
     socklen_t * fromlen2 = (socklen_t*)sizeof(cliaddr);//added
@@ -413,10 +452,28 @@ char* routerCheck = "router";
     if (bob->ip_ttl < 1){continue;}
     printf("ttl incremented.\n"); 
 
+    // cliaddr
+    sendLen = sizeof(nextHopAddr);  //len is value/resuslt
+    socklen_t sendLenTwo = (socklen_t)sizeof(nextHopAddr);//added
+
+    // destIP is the overlay IP of our dest host
+    char* destIP = new char[16]; 
+    destIP = inet_ntoa(bob->ip_dst);
+
+    // this call will return the real IP value of the next hop in in_addr form.
+    //setTree(INADDR_ANY, destIP, root, false);
+    in_addr realIP = setTree(INADDR_ANY, destIP, root, false);
+    printf("Here's the IP we think we're forwarding the packet to : ");
+    printf(inet_ntoa(realIP));
+    printf("\n");
+
+    nextHopAddr.sin_family    = AF_INET; // IPv4
+    nextHopAddr.sin_addr.s_addr = realIP.s_addr; //Dest. IP;
+    nextHopAddr.sin_port = htons(PORT);
 
     sendto(sockfd, (const char *)hello, strlen(hello), 
-        MSG_CONFIRM, (const struct sockaddr *) &cliaddr,
-            len);
+        MSG_CONFIRM, (const struct sockaddr *) &nextHopAddr,
+            sendLenTwo);
     printf("Hello message sent.\n"); }}
 
 
