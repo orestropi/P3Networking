@@ -18,8 +18,7 @@
 #include <iterator>
 using namespace std;
 #define MAXLINE 3000
-int PORT = 8080;
-
+#define PORT  8080
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
 #include <sys/stat.h>
@@ -53,22 +52,21 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
   
   // getting ip in 4dot notation
   pch = strtok (overlayIP,"/");
-  printf ("Here's the IP addr: %s\n",pch);
+  printf ("%s\n",pch);
   // set router to proper number / direction
   int n = ntohl(inet_addr(pch));
-  printf("This is the IP addr in decimal : %d\n", htonl(inet_addr(pch)));
+  printf("%d\n", htonl(inet_addr(pch)));
   
   // get prefix length
-
-   int prefixLength;
-  pch = strtok (NULL,"/");
-  if(pch == NULL){
-      prefixLength=32;
-  }
-  else{
-   printf ("This is the IP prefix length : %s\n",pch);
+  pch = strtok (NULL,"/"); 
+	int prefixLength;
+	if(pch==NULL){
+		prefixLength=32;
+	}
+	else{
+   printf ("%s\n",pch);
    prefixLength = atoi(pch);
-  }
+	}
    
    //create array to display binary nums
   int binaryNum[32];
@@ -89,7 +87,7 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
     // printing binary array in reverse order (right order)
     for (int j = 31; j >= 32-prefixLength; j--)
         printf("%d", binaryNum[j]);
-    printf (" <- IP addr in binary\n");
+    printf ("\n");
  
     struct node *currentNode = root;
     
@@ -136,12 +134,9 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
     currentNode->isSet=1;
     
     //actualNextHopIP comes from config file
-    if(SetValue){
     struct in_addr realIPAddr;
     u_int32_t actualNextHopIP = inet_pton(AF_INET, realIP, &realIPAddr);
     currentNode->nextHopIP = realIPAddr;
-    }
-    else
     return currentNode->nextHopIP;
 }
 
@@ -290,21 +285,21 @@ if (file.is_open())
         counter++;
     }
 }
-in_addr_t ourRouterAddress = INADDR_ANY;
+in_addr_t ourRouterAddressIntegerVer = INADDR_ANY;
 char* router1sw = "1";
 char* router2sw = "2";
 char* router3sw = "3";
+char ourRouterAddress[16];
 if(strcmp(argv[2], router1sw) == 0){
-    ourRouterAddress = inet_addr(strcpy(new char[router1[2].length()+1], router1[2].c_str()));
+    strcpy(ourRouterAddress, router1[2].c_str());
+    ourRouterAddressIntegerVer = inet_addr(ourRouterAddress);
 }
 if(strcmp(argv[2], router2sw) == 0){
-    ourRouterAddress = inet_addr(strcpy(new char[router2[2].length()+1], router2[2].c_str()));
-}
+    strcpy(ourRouterAddress, router2[2].c_str());
+    ourRouterAddressIntegerVer = inet_addr(ourRouterAddress);}
 if(strcmp(argv[2], router3sw) == 0){
-    ourRouterAddress = inet_addr(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
-}
-
-
+    strcpy(ourRouterAddress, router3[2].c_str());
+    ourRouterAddressIntegerVer = inet_addr(ourRouterAddress);}
 
     // at lines 5 6 7 fill tree with faux data
     // at lines 11 12 13 fill tree with real data
@@ -341,19 +336,18 @@ char* routerCheck = "router";
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
-       
+    cout << "<ourRouterAddress: >" << ourRouterAddress << "<--->\n";
+    cout << "<ourRouterAddressIntegerVer: >" << ourRouterAddressIntegerVer << "<--->\n";
+
     memset(&servaddr, 0, sizeof(servaddr));
     memset(&cliaddr, 0, sizeof(cliaddr));
-       
+    
+
     // Filling server information
     servaddr.sin_family    = AF_INET; // IPv4
-    servaddr.sin_addr.s_addr = ourRouterAddress;
+    servaddr.sin_addr.s_addr = ourRouterAddressIntegerVer;//INADDR_ANY; works
     servaddr.sin_port = htons(PORT);
        
-
-       // this is failing because it's attempting to bind to a non-existant address
-       // what this means for us is that we have to have "real" addresses given to us
-       // or somehow make 10.0.2.1 (and the others) "real"
     // Bind the socket with the server address
     if ( bind(sockfd, (const struct sockaddr *)&servaddr, 
             sizeof(servaddr)) < 0 )
@@ -447,14 +441,16 @@ if (file.is_open())
       newfile.close();
    }
    fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));    
-   strncpy(data, dataToBeSent.c_str(), dataToBeSent.size());
+   strncpy(data, dataToBeSent.c_str(), 1000);
    indicator++;
    }
     }
 
+    char* newBuf = new char[sendConfig[0].length()+1]; 
+    strcpy(newBuf, sendConfig[0].c_str());
 
-
-    in_addr myaddress2 = {.s_addr = inet_addr(strcpy(new char[sendConfig[0].length()+1], sendConfig[0].c_str()))};
+    in_addr myaddress2;
+    myaddress2.s_addr = inet_addr(newBuf);
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
     bob->ip_ttl = stoi(globalConfigOptions[2]);
@@ -481,7 +477,7 @@ if (file.is_open())
     // Filling server information
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT);
-    servaddr.sin_addr.s_addr = ourRouterAddress;
+    servaddr.sin_addr.s_addr = ourRouterAddressIntegerVer;
        
     int n, len;
     socklen_t * fromlen2;//added
