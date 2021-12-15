@@ -336,10 +336,13 @@ char* routerCheck = "router";
         perror("socket creation failed");
         exit(EXIT_FAILURE);
     }
-       
+    cout << "<ourRouterAddress: >" << ourRouterAddress << "<--->\n";
+    cout << "<ourRouterAddressIntegerVer: >" << ourRouterAddressIntegerVer << "<--->\n";
+
     memset(&servaddr, 0, sizeof(servaddr));
     memset(&cliaddr, 0, sizeof(cliaddr));
-       
+    
+
     // Filling server information
     servaddr.sin_family    = AF_INET; // IPv4
     servaddr.sin_addr.s_addr = ourRouterAddressIntegerVer;//INADDR_ANY; works
