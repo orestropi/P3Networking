@@ -174,7 +174,7 @@ std::vector<std::string> link23;
 
 
 
-int meshNum = atoi(argv[2]);    // which machine are we dealing with
+int meshNum = atoi(argv[2]);    // which machine are we dealing with? (1,2,3 are routers. 4,5,6 are hosts)
 
     // create starting node of tree
     struct node *root = (struct node *) malloc(sizeof(struct node));
