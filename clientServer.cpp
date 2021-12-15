@@ -285,19 +285,21 @@ if (file.is_open())
         counter++;
     }
 }
-in_addr_t ourRouterAddress = INADDR_ANY;
+in_addr_t ourRouterAddressIntegerVer = INADDR_ANY;
 char* router1sw = "1";
 char* router2sw = "2";
 char* router3sw = "3";
+char ourRouterAddress[16];
 if(strcmp(argv[2], router1sw) == 0){
-    ourRouterAddress = inet_addr(strcpy(new char[router1[2].length()+1], router1[2].c_str()));
+    strcpy(ourRouterAddress, router1[2].c_str());
+    ourRouterAddressIntegerVer = inet_addr(ourRouterAddress);
 }
 if(strcmp(argv[2], router2sw) == 0){
-    ourRouterAddress = inet_addr(strcpy(new char[router2[2].length()+1], router2[2].c_str()));
-}
+    strcpy(ourRouterAddress, router2[2].c_str());
+    ourRouterAddressIntegerVer = inet_addr(ourRouterAddress);}
 if(strcmp(argv[2], router3sw) == 0){
-    ourRouterAddress = inet_addr(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
-}
+    strcpy(ourRouterAddress, router3[2].c_str());
+    ourRouterAddressIntegerVer = inet_addr(ourRouterAddress);}
 
     // at lines 5 6 7 fill tree with faux data
     // at lines 11 12 13 fill tree with real data
@@ -340,7 +342,7 @@ char* routerCheck = "router";
        
     // Filling server information
     servaddr.sin_family    = AF_INET; // IPv4
-    servaddr.sin_addr.s_addr = ourRouterAddress;//INADDR_ANY; works
+    servaddr.sin_addr.s_addr = ourRouterAddressIntegerVer;//INADDR_ANY; works
     servaddr.sin_port = htons(PORT);
        
     // Bind the socket with the server address
