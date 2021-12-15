@@ -295,7 +295,6 @@ if(strcmp(argv[2], router3sw) == 0){
     ourRouterAddress = inet_addr(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
 }
 
-in_addr_t ourRouterAddress = inet_addr(strcpy(new char[router1[2].length()+1], router1[2].c_str()));
     // at lines 5 6 7 fill tree with faux data
     // at lines 11 12 13 fill tree with real data
 
@@ -365,11 +364,8 @@ char* routerCheck = "router";
     struct ip *bob = (struct ip *)dest_buffer;
     struct udphdr *sally = (struct udphdr *)(dest_buffer+20);
     char* data = (dest_buffer + 28);
+    //bob->ip_dst; our ip destination
 
-    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
-    bob->ip_dst = myaddress2;
-    sally->uh_sport = ntohs(5950);
-    strncpy(data,"hello world", 12);
 
     
 
@@ -446,6 +442,7 @@ if (file.is_open())
     in_addr myaddress2 = {.s_addr = inet_addr(strcpy(new char[sendConfig[0].length()+1], sendConfig[0].c_str()))};
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
+    bob->ip_ttl = stoi(globalConfigOptions[2]);
     //source and destination port
     sally->uh_sport = htons(stoi(sendConfig[1]));
     sally->uh_dport = htons(stoi(sendConfig[2]));
