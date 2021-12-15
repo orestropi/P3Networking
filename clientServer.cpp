@@ -364,11 +364,8 @@ char* routerCheck = "router";
     struct ip *bob = (struct ip *)dest_buffer;
     struct udphdr *sally = (struct udphdr *)(dest_buffer+20);
     char* data = (dest_buffer + 28);
+    //bob->ip_dst; our ip destination
 
-    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
-    bob->ip_dst = myaddress2;
-    sally->uh_sport = ntohs(5950);
-    strncpy(data,"hello world", 12);
 
     
 
