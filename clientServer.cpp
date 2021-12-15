@@ -18,7 +18,7 @@
 #include <iterator>
 using namespace std;
 #define MAXLINE 3000
-int PORT = 8080; //initial port, wiill be overwritten by send_config file
+int PORT = 8080;
 
 // Driver code from https://www.geeksforgeeks.org/udp-server-client-implementation-c/
 
@@ -182,7 +182,7 @@ int meshNum = atoi(argv[2]);    // which machine are we dealing with
     root->zeroChild=NULL;
     root->oneChild=NULL;
 
-ifstream file("send_config.txt");
+ifstream file("config.txt");
 if (file.is_open())
 {
 	string line;
@@ -280,6 +280,21 @@ if (file.is_open())
         counter++;
     }
 }
+in_addr_t ourRouterAddress = INADDR_ANY;
+char* router1sw = "1";
+char* router2sw = "2";
+char* router3sw = "3";
+if(strcmp(argv[2], router1sw) == 0){
+    ourRouterAddress = inet_addr(strcpy(new char[router1[2].length()+1], router1[2].c_str()));
+}
+if(strcmp(argv[2], router2sw) == 0){
+    ourRouterAddress = inet_addr(strcpy(new char[router2[2].length()+1], router2[2].c_str()));
+}
+if(strcmp(argv[2], router3sw) == 0){
+    ourRouterAddress = inet_addr(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
+}
+
+in_addr_t ourRouterAddress = inet_addr(strcpy(new char[router1[2].length()+1], router1[2].c_str()));
     // at lines 5 6 7 fill tree with faux data
     // at lines 11 12 13 fill tree with real data
 
@@ -287,24 +302,24 @@ if (file.is_open())
 char* routerCheck = "router";
     if(strcmp(argv[1], routerCheck) == 0){
     printf("server here\n");
-    fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
+    //fprintf(stdout, "Waiting for send_config.txt .... (so I know the port number all the routers and hosts will be using)\n ");
 //reading send_body    
-int indicator = 0;
-std::vector<std::string> sendConfig;
-    while(indicator == 0){
-    if(fileExist("send_config.txt")){
-    ifstream file("send_config.txt");
-if (file.is_open())
-{
-	string line;
-	while (getline(file, line))
-    {
-            sendConfig = split(line, ' ');
+//int indicator = 0;
+// std::vector<std::string> sendConfig;
+//     while(indicator == 0){
+//     if(fileExist("send_config.txt")){
+//     ifstream file("send_config.txt");
+// if (file.is_open())
+// {
+// 	string line;
+// 	while (getline(file, line))
+//     {
+//             sendConfig = split(line, ' ');
     
-    }}}}
+//     }}}}
 //setting port to what is on send_config file
-    printf("Our port number is: %d\n", stoi(sendConfig[2]));
-    PORT = stoi(sendConfig[2]);
+    //printf("Our port number is: %d\n", stoi(sendConfig[2]));
+    //PORT = stoi(sendConfig[2]);
     int sockfd;
     char dest_buffer[MAXLINE];
     char *hello = "Hello world";
@@ -321,7 +336,7 @@ if (file.is_open())
        
     // Filling server information
     servaddr.sin_family    = AF_INET; // IPv4
-    servaddr.sin_addr.s_addr = INADDR_ANY;
+    servaddr.sin_addr.s_addr = ourRouterAddress;
     servaddr.sin_port = htons(PORT);
        
     // Bind the socket with the server address
@@ -391,7 +406,7 @@ if (file.is_open())
     fstream newfile;
     int indicator = 0; 
     fprintf(stdout, "Waiting for send_config.txt ....\n");
-        //part 2 of roadmap generating random packet for transmission
+    //part 2 of roadmap generating random packet for transmission
     struct ip *bob = (struct ip *)buffer;
     struct udphdr *sally = (struct udphdr *)(buffer+20);
     char* data = (buffer + 28);
@@ -408,8 +423,8 @@ if (file.is_open())
             sendConfig = split(line, ' ');
     
     }}
-    printf("Our port number is: %d\n", stoi(sendConfig[2]));
-    PORT = stoi(sendConfig[2]);
+    //printf("Our port number is: %d\n", stoi(sendConfig[2]));
+    //PORT = stoi(sendConfig[2]);
     newfile.open("send_body.txt",ios::in);
    if (newfile.is_open()){
       string tp;
@@ -430,9 +445,9 @@ if (file.is_open())
     in_addr myaddress2 = {.s_addr = inet_addr(strcpy(new char[sendConfig[0].length()+1], sendConfig[0].c_str()))};
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
-    //source and destination port are the same
-    sally->uh_sport = stoi(sendConfig[2]);
-    sally->uh_dport =  stoi(sendConfig[2]);
+    //source and destination port
+    sally->uh_sport = htons(stoi(sendConfig[1]));
+    sally->uh_dport = htons(stoi(sendConfig[2]));
 
     
     
@@ -453,12 +468,12 @@ if (file.is_open())
     // Filling server information
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT);
-    servaddr.sin_addr.s_addr = INADDR_ANY;
+    servaddr.sin_addr.s_addr = ourRouterAddress;
        
     int n, len;
     socklen_t * fromlen2;//added
   
-    sendto(sockfd, (const char *)data, strlen(data),
+    sendto(sockfd, buffer, 1000,
         MSG_CONFIRM, (const struct sockaddr *) &servaddr, 
             sizeof(servaddr));
     printf("Hello message sent.\n");
