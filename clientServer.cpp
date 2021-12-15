@@ -32,7 +32,7 @@ long fileSize(std::string filename)
 
  struct node {
 	struct in_addr nextHopIP;
-    struct in_addr currentMostRecent;
+    // struct in_addr currentMostRecent;
 	bool isSet;
 	struct node *zeroChild;
 	struct node *oneChild;
@@ -48,6 +48,9 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
     // string we'll fill with info
   char * pch;
     
+    struct in_addr valueSeenSoFar;
+    valueSeenSoFar.s_addr=0;
+
   // strtok to get prefix / ip
   printf ("Splitting string \"%s\" into tokens:\n", overlayIP);
   
@@ -93,13 +96,14 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
     struct node *currentNode = root;
     
     for(int j=31; j>= 32-prefixLength; j--){
+        // printf();
 	// determine if current ip number is bit 0 or 1
 	 if(binaryNum[j]=0){
 		// traverse and create node at zeroChild
 		if(currentNode->zeroChild==NULL) {
 		    // create a node 
 			currentNode->zeroChild = (struct node *) malloc(sizeof(struct node));
-            currentNode->zeroChild->currentMostRecent = currentNode->currentMostRecent;
+            //currentNode->zeroChild->currentMostRecent = currentNode->currentMostRecent;
 			currentNode->zeroChild->isSet=0;
 			currentNode->zeroChild->zeroChild=NULL;
 			currentNode->zeroChild->oneChild=NULL;
@@ -109,8 +113,10 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 			}
 		else {
 		    // traverse to node currentNode = currentNode->zeroChild
-            if(!currentNode->isSet && currentNode->zeroChild->isSet){
-                currentNode->zeroChild->currentMostRecent = currentNode->zeroChild->nextHopIP;
+            if (currentNode->isSet){
+                printf("This is the node I'm at : %d \n", j);
+                valueSeenSoFar=currentNode->nextHopIP;
+                printf("This is the value I've seen : %d \n", valueSeenSoFar.s_addr);
             }
 		    currentNode = currentNode->zeroChild;
 			continue;
@@ -121,7 +127,7 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 	    if(currentNode->oneChild==NULL) {
 		    // create a node same as before
 			currentNode->oneChild = (struct node *) malloc(sizeof(struct node));
-            currentNode->oneChild->currentMostRecent = currentNode->currentMostRecent;
+            //currentNode->oneChild->currentMostRecent = currentNode->currentMostRecent;
             currentNode->oneChild->isSet=0;
 			currentNode->oneChild->zeroChild=NULL;
 			currentNode->oneChild->oneChild=NULL;
@@ -131,8 +137,10 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
 			}
 		else {
 		    // traverse to node currentNode = currentNode->oneChild
-            if(!currentNode->isSet && currentNode->oneChild->isSet){
-                currentNode->oneChild->currentMostRecent = currentNode->oneChild->nextHopIP;
+            if (currentNode->isSet){
+                printf("This is the node I'm at : %d \n", 32-j);
+                valueSeenSoFar=currentNode->nextHopIP;
+                printf("This is the value I've seen : %d \n", ntohl(valueSeenSoFar.s_addr));
             }
 		    currentNode = currentNode->oneChild;
 			continue;
@@ -147,11 +155,10 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
         struct in_addr realIPAddr;
         u_int32_t actualNextHopIP = inet_pton(AF_INET, realIP, &realIPAddr);
         currentNode->nextHopIP = realIPAddr;
-        currentNode->currentMostRecent = realIPAddr;
-        return currentNode->currentMostRecent;
+        return currentNode->nextHopIP;
     }
     else
-        return currentNode->currentMostRecent;
+        return valueSeenSoFar;
 }
 
 inline bool fileExist (const std::string& name) {
@@ -197,7 +204,6 @@ int meshNum = atoi(argv[2]);    // which machine are we dealing with? (1,2,3 are
 
     // create starting node of tree
     struct node *root = (struct node *) malloc(sizeof(struct node));
-    root->currentMostRecent;
     root->isSet=0;
     root->zeroChild=NULL;
     root->oneChild=NULL;
@@ -298,7 +304,7 @@ if (file.is_open())
              printf("\n");
             }
             // if not router 1 set host 4's overlay address to router 1's real address
-            else if (meshNum != stoi(link21[1])){
+            else {
                   strcpy(realIP, router1[2].c_str());
                 strcpy(overlayIP, link21[3].c_str());
              printf("\n");
@@ -320,12 +326,13 @@ if (file.is_open())
              printf("\n");
              }
             // if not router 2 set host 5's overlay address to router 2's real address
-            else
+            else{
                   strcpy(realIP, router2[2].c_str());
                 strcpy(overlayIP, link22[3].c_str());
              printf("\n");
              printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
              printf("\n");
+            }
         }
         if(counter==12){
             link23 = split(line, ' ');
@@ -341,12 +348,13 @@ if (file.is_open())
              printf("\n");
              }
             // if not router 3 set host 6's overlay address to router 3's real address
-            else
+            else{
                 strcpy(realIP, router3[2].c_str());
                 strcpy(overlayIP, link23[3].c_str());
              printf("\n");
              printf(inet_ntoa(setTree(realIP, overlayIP, root, true)));
              printf("\n");
+            }
         }         
     	cout << line << endl;
         counter++;
@@ -548,6 +556,7 @@ if (file.is_open())
     
     int sockfd;
     struct sockaddr_in servaddr;
+
     // char buffer[MAXLINE];
     // char *hello = "Hello World";
     // struct sockaddr_in     servaddr;
