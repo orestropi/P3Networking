@@ -294,7 +294,6 @@ if(strcmp(argv[2], router3sw) == 0){
     ourRouterAddress = inet_addr(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
 }
 
-in_addr_t ourRouterAddress = inet_addr(strcpy(new char[router1[2].length()+1], router1[2].c_str()));
     // at lines 5 6 7 fill tree with faux data
     // at lines 11 12 13 fill tree with real data
 
