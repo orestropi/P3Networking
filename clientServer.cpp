@@ -59,10 +59,15 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
   printf("%d\n", htonl(inet_addr(pch)));
   
   // get prefix length
-  pch = strtok (NULL,"/");
+  pch = strtok (NULL,"/"); 
+	int prefixLength;
+	if(pch==NULL){
+		prefixLength=32;
+	}
+	else{
    printf ("%s\n",pch);
-   int prefixLength;
    prefixLength = atoi(pch);
+	}
    
    //create array to display binary nums
   int binaryNum[32];
