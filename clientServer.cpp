@@ -427,7 +427,7 @@ if (file.is_open())
 
 
 
-    in_addr myaddress2 = {.s_addr = inet_addr("10.0.2.104")};
+    in_addr myaddress2 = {.s_addr = inet_addr(strcpy(new char[sendConfig[0].length()+1], sendConfig[0].c_str()))};
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
     //source and destination port are the same
