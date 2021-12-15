@@ -474,7 +474,7 @@ if (file.is_open())
     // Filling server information
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(PORT);
-    servaddr.sin_addr.s_addr = ourRouterAddress;
+    servaddr.sin_addr.s_addr = ourRouterAddressIntegerVer;
        
     int n, len;
     socklen_t * fromlen2;//added
