@@ -472,6 +472,8 @@ int main(int argc, char *argv[])
         servaddr.sin_family = AF_INET;                         // IPv4
         servaddr.sin_addr.s_addr = ourRouterAddressIntegerVer; //INADDR_ANY; works
         servaddr.sin_port = htons(PORT);
+        
+
 
         // Bind the socket with the server address
         if (bind(sockfd, (const struct sockaddr *)&servaddr,
@@ -507,6 +509,12 @@ int main(int argc, char *argv[])
             //Task 4 drop tail qeueing
             if (bob->ip_ttl < 1)
             {
+
+                //Task 8
+                ofstream myfile;
+                myfile.open ( "ROUTER_control.txt");
+                myfile << "TTL EXPIRED\n";
+                myfile.close();
                 continue;
             }
             printf("ttl incremented.\n");
@@ -536,10 +544,16 @@ int main(int argc, char *argv[])
             nextHopAddr.sin_addr.s_addr = realIP.s_addr; //Dest. IP;
             nextHopAddr.sin_port = htons(PORT);
 
+            
             //Task 1: sending message using UDP
             sendto(sockfd, (const char *)hello, strlen(hello),
                    MSG_CONFIRM, (const struct sockaddr *)&nextHopAddr,
                    sendLenTwo);
+            //Task 8
+            ofstream myfile;
+            myfile.open ( "ROUTER_control.txt");
+            myfile << "SENT OKAY %s\n", nextHopAddr;
+            myfile.close();
             printf("Hello message sent.\n");
         }
     }
@@ -587,7 +601,9 @@ int main(int argc, char *argv[])
                     }
                     newfile.close();
                 }
+                //Task 8
                 fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));
+                fprintf(stdout, "The size how many packets we will send: %d \n", fileSize("send_body.txt")/1000);
                 strncpy(data, dataToBeSent.c_str(), 1000);
                 indicator++;
             }
