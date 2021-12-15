@@ -53,16 +53,22 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
   
   // getting ip in 4dot notation
   pch = strtok (overlayIP,"/");
-  printf ("%s\n",pch);
+  printf ("Here's the IP addr: %s\n",pch);
   // set router to proper number / direction
   int n = ntohl(inet_addr(pch));
-  printf("%d\n", htonl(inet_addr(pch)));
+  printf("This is the IP addr in decimal : %d\n", htonl(inet_addr(pch)));
   
   // get prefix length
-  pch = strtok (NULL,"/");
-   printf ("%s\n",pch);
+
    int prefixLength;
+  pch = strtok (NULL,"/");
+  if(pch == NULL){
+      prefixLength=32;
+  }
+  else{
+   printf ("This is the IP prefix length : %s\n",pch);
    prefixLength = atoi(pch);
+  }
    
    //create array to display binary nums
   int binaryNum[32];
@@ -83,7 +89,7 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
     // printing binary array in reverse order (right order)
     for (int j = 31; j >= 32-prefixLength; j--)
         printf("%d", binaryNum[j]);
-    printf ("\n");
+    printf (" <- IP addr in binary\n");
  
     struct node *currentNode = root;
     
@@ -130,9 +136,12 @@ struct in_addr setTree(char realIP[], char overlayIP[], node* root, bool SetValu
     currentNode->isSet=1;
     
     //actualNextHopIP comes from config file
+    if(SetValue){
     struct in_addr realIPAddr;
     u_int32_t actualNextHopIP = inet_pton(AF_INET, realIP, &realIPAddr);
     currentNode->nextHopIP = realIPAddr;
+    }
+    else
     return currentNode->nextHopIP;
 }
 
@@ -295,6 +304,8 @@ if(strcmp(argv[2], router3sw) == 0){
     ourRouterAddress = inet_addr(strcpy(new char[router3[2].length()+1], router3[2].c_str()));
 }
 
+
+
     // at lines 5 6 7 fill tree with faux data
     // at lines 11 12 13 fill tree with real data
 
@@ -339,6 +350,10 @@ char* routerCheck = "router";
     servaddr.sin_addr.s_addr = ourRouterAddress;
     servaddr.sin_port = htons(PORT);
        
+
+       // this is failing because it's attempting to bind to a non-existant address
+       // what this means for us is that we have to have "real" addresses given to us
+       // or somehow make 10.0.2.1 (and the others) "real"
     // Bind the socket with the server address
     if ( bind(sockfd, (const struct sockaddr *)&servaddr, 
             sizeof(servaddr)) < 0 )
