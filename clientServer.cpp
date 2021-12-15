@@ -436,14 +436,16 @@ if (file.is_open())
       newfile.close();
    }
    fprintf(stdout, "The size of our file is: %d \n", fileSize("send_body.txt"));    
-   strncpy(data, dataToBeSent.c_str(), dataToBeSent.size());
+   strncpy(data, dataToBeSent.c_str(), 1000);
    indicator++;
    }
     }
 
+    char* newBuf = new char[sendConfig[0].length()+1]; 
+    strcpy(newBuf, sendConfig[0].c_str());
 
-
-    in_addr myaddress2 = {.s_addr = inet_addr(strcpy(new char[sendConfig[0].length()+1], sendConfig[0].c_str()))};
+    in_addr myaddress2;
+    myaddress2.s_addr = inet_addr(newBuf);
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
     bob->ip_ttl = stoi(globalConfigOptions[2]);
