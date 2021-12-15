@@ -237,15 +237,15 @@ if (file.is_open())
         if(counter==5){
             host2 = split(line, ' ');
             printf("line 6: ");
-             strcpy(realIP, host1[2].c_str());
-            strcpy(overlayIP, host1[3].c_str());
+             strcpy(realIP, host2[2].c_str());
+            strcpy(overlayIP, host2[3].c_str());
              setTree(realIP, overlayIP, root, true);
         }
         if(counter==6){
             host3 = split(line, ' ');
             printf("line 7: ");
-            strcpy(realIP, host1[2].c_str());
-            strcpy(overlayIP, host1[3].c_str());
+            strcpy(realIP, host3[2].c_str());
+            strcpy(overlayIP, host3[3].c_str());
              setTree(realIP, overlayIP, root, true);
         }
         if(counter==7){
@@ -266,11 +266,15 @@ if (file.is_open())
             
             // if this is router 1 set host 4's overlay address to host 4's real address.
             if(meshNum == stoi(link21[1])){
-                 setTree(strcpy(new char[host1[2].length() + 1], host1[2].c_str()), strcpy(new char[link21[3].length() + 1], link21[3].c_str()), root, true);
+                 strcpy(realIP, host1[2].c_str());
+                strcpy(overlayIP, link21[3].c_str());
+             setTree(realIP, overlayIP, root, true);
             }
             // if not router 1 set host 4's overlay address to router 1's real address
             else
-                 setTree(strcpy(new char[router1[2].length() + 1], router1[2].c_str()), strcpy(new char[link21[3].length() + 1], link21[3].c_str()), root, true);
+                  strcpy(realIP, router1[2].c_str());
+                strcpy(overlayIP, link21[3].c_str());
+             setTree(realIP, overlayIP, root, true);
             
         }
         if(counter==11){
@@ -278,11 +282,16 @@ if (file.is_open())
             printf("line 12: ");
             
             // if this is router 2 set host 5's overlay address to host 5's real address.
-             if(meshNum ==  stoi(link22[1]))
-                 setTree(strcpy(new char[host2[2].length() + 1], host2[2].c_str()), strcpy(new char[link22[3].length() + 1], link22[3].c_str()), root, true);
+             if(meshNum ==  stoi(link22[1])) {
+                  strcpy(realIP, host2[2].c_str());
+                strcpy(overlayIP, link22[3].c_str());
+             setTree(realIP, overlayIP, root, true);
+             }
             // if not router 2 set host 5's overlay address to router 2's real address
             else
-                setTree(strcpy(new char[router2[2].length() + 1], router2[2].c_str()), strcpy(new char[link22[3].length() + 1], link22[3].c_str()), root, true);
+                  strcpy(realIP, router2[2].c_str());
+                strcpy(overlayIP, link22[3].c_str());
+             setTree(realIP, overlayIP, root, true);
         }
         if(counter==12){
             link23 = split(line, ' ');
@@ -291,11 +300,15 @@ if (file.is_open())
             // if this is router 3 set host 6's overlay address to host 6's real address.
              if(meshNum ==  stoi(link23[1])){
                  // converting strings into char*s, running through tree like that
-                 setTree(strcpy(new char[host3[2].length() + 1], host3[2].c_str()), strcpy(new char[link23[3].length() + 1], link23[3].c_str()), root, true);
+                 strcpy(realIP, host3[2].c_str());
+                strcpy(overlayIP, link23[3].c_str());
+             setTree(realIP, overlayIP, root, true);
              }
             // if not router 3 set host 6's overlay address to router 3's real address
             else
-                setTree(strcpy(new char[router3[2].length() + 1], router3[2].c_str()), strcpy(new char[link23[3].length() + 1], link23[3].c_str()), root, true);
+                strcpy(realIP, router3[2].c_str());
+                strcpy(overlayIP, link23[3].c_str());
+             setTree(realIP, overlayIP, root, true);
         }         
     	cout << line << endl;
         counter++;
