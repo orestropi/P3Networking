@@ -244,7 +244,7 @@ if (file.is_open())
         if(counter==6){
             host3 = split(line, ' ');
             printf("line 7: ");
-             strcpy(realIP, host1[2].c_str());
+            strcpy(realIP, host1[2].c_str());
             strcpy(overlayIP, host1[3].c_str());
              setTree(realIP, overlayIP, root, true);
         }
