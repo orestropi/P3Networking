@@ -340,7 +340,7 @@ char* routerCheck = "router";
        
     // Filling server information
     servaddr.sin_family    = AF_INET; // IPv4
-    servaddr.sin_addr.s_addr = INADDR_ANY;//ourRouterAddress;
+    servaddr.sin_addr.s_addr = ourRouterAddress;//INADDR_ANY; works
     servaddr.sin_port = htons(PORT);
        
     // Bind the socket with the server address
