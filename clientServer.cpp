@@ -442,6 +442,7 @@ if (file.is_open())
     in_addr myaddress2 = {.s_addr = inet_addr(strcpy(new char[sendConfig[0].length()+1], sendConfig[0].c_str()))};
     bob->ip_dst = myaddress2;
     bob->ip_p =17;
+    bob->ip_ttl = stoi(globalConfigOptions[2]);
     //source and destination port
     sally->uh_sport = htons(stoi(sendConfig[1]));
     sally->uh_dport = htons(stoi(sendConfig[2]));
