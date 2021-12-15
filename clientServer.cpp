@@ -367,12 +367,13 @@ char* routerCheck = "router";
                 MSG_WAITALL, ( struct sockaddr *) &cliaddr,
                 fromlen2);
     //dest_buffer[n] = '\0';
-    printf("Client : %s\n", (dest_buffer+sizeof(struct ip *)+sizeof(struct udphdr *)));
-
     //part 2 of roadmap generating random packet for transmission
     struct ip *bob = (struct ip *)dest_buffer;
     struct udphdr *sally = (struct udphdr *)(dest_buffer+20);
     char* data = (dest_buffer + 28);
+    printf("Client : %s\n", data);
+
+    
     //bob->ip_dst; our ip destination
 
 
