@@ -366,8 +366,8 @@ char* routerCheck = "router";
     n = recvfrom(sockfd, (char *)dest_buffer, MAXLINE, 
                 MSG_WAITALL, ( struct sockaddr *) &cliaddr,
                 fromlen2);
-    dest_buffer[n] = '\0';
-    printf("Client : %s\n", dest_buffer);
+    //dest_buffer[n] = '\0';
+    printf("Client : %s\n", (dest_buffer+sizeof(struct ip *)+sizeof(struct udphdr *)));
 
     //part 2 of roadmap generating random packet for transmission
     struct ip *bob = (struct ip *)dest_buffer;
@@ -457,7 +457,6 @@ if (file.is_open())
     //source and destination port
     sally->uh_sport = htons(stoi(sendConfig[1]));
     sally->uh_dport = htons(stoi(sendConfig[2]));
-
     
     
     int sockfd;
