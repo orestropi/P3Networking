@@ -22,7 +22,7 @@ How to create router ./clientServer <anything> <{1,2, or 3} -> based on which ho
   
 In the example below the router was created before the host. They are able to communicate populated UDP packets.
   
-The send config file was alredy in the fie system, but this is not necessary as our program will scan for it constantly (you can add the file while the host is running)
+The send config file was alredy in the file system, but this is not necessary as our program will scan for it constantly (you can add the file while the host is running)
   
 ![image](https://user-images.githubusercontent.com/73619173/146284141-540857ee-5b23-43d5-aa75-8f03ec5294b4.png)
 
