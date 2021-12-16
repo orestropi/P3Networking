@@ -552,7 +552,7 @@ int main(int argc, char *argv[])
             //Task 8
             ofstream myfile;
             myfile.open ( "ROUTER_control.txt");
-            myfile << "SENT OKAY %s\n", nextHopAddr;
+            myfile << "SENT OKAY: ", nextHopAddr;
             myfile.close();
             printf("Hello message sent.\n");
         }
