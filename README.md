@@ -25,4 +25,10 @@ In the example below the router was created before the host. They are able to co
 The send config file was alredy in the file system, but this is not necessary as our program will scan for it constantly (you can add the file while the host is running)
   
 ![image](https://user-images.githubusercontent.com/73619173/146284141-540857ee-5b23-43d5-aa75-8f03ec5294b4.png)
+  
+  Below is an example of routers communicating with each other. First, initialize routers. then initialize hosts. 
+  
+  Hosts will send messages to routers, and routers to routers, and routers to hosts, as seen on the line directly above the last "Hello Message Sent" in each window.
+  
+  Top left: Host 1 (IP 1.2.3.1 / 10.0.2.104), Top Right: Router 1 (IP 10.0.2.101), Bottom left : Router 3 (IP 10.0.2.103), Bottom Right : Host 3 (IP 7.8.9.1 / 10.0.2.106)
 
